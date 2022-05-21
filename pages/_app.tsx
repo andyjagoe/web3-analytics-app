@@ -4,11 +4,43 @@ import { AppProps } from 'next/app'
 import Layout from '../components/layout'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import { CacheProvider, EmotionCache } from '@emotion/react';
-import theme from '../src/theme';
-import createEmotionCache from '../src/createEmotionCache';
+import { CacheProvider, EmotionCache } from '@emotion/react'
+import theme from '../src/theme'
+import createEmotionCache from '../src/createEmotionCache'
 import { SessionProvider } from "next-auth/react"
+import { WagmiConfig, createClient, defaultChains, configureChains } from 'wagmi'
+import { alchemyProvider } from 'wagmi/providers/alchemy'
+import { publicProvider } from 'wagmi/providers/public'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 
+const alchemyId = process.env.ALCHEMY_ID
+
+const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+  alchemyProvider({ alchemyId }),
+  publicProvider(),
+])
+
+// Set up client
+const client = createClient({
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new WalletConnectConnector({
+      chains,
+      options: {
+        qrcode: true,
+      },
+    }),
+    new InjectedConnector({
+      chains,
+      options: { name: 'Injected' },
+    }),
+  ],
+  provider,
+  webSocketProvider,
+})
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -22,19 +54,21 @@ function MyApp(props:MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, 
     pageProps: { session, ...pageProps } } = props;
   return (
-    <SessionProvider session={session}>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
-      </CacheProvider>
-    </SessionProvider>
+    <WagmiConfig client={client}>
+      <SessionProvider session={session}>
+        <CacheProvider value={emotionCache}>
+          <Head>
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
+          </Head>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ThemeProvider>
+        </CacheProvider>
+      </SessionProvider>
+    </WagmiConfig>
   )
 }
 

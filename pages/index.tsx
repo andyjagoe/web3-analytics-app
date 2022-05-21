@@ -1,8 +1,13 @@
+import * as React from 'react';
+import type { NextPage } from 'next';
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { useSession, signIn, signOut } from "next-auth/react"
+import styles from '../styles/Home.module.css' assert { type: 'css' }
 
-export default function Home() {
+const Home: NextPage = () => {
+  const { data: session } = useSession()
+
   return (
     <div className={styles.container}>
       <Head>
@@ -15,6 +20,18 @@ export default function Home() {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        {session?
+        <>
+          Signed in as {session.user?.email} <br />
+          <button onClick={() => signOut()}>Sign out</button>
+        </>
+        :
+        <>
+          Not signed in <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>           
+        }
 
         <p className={styles.description}>
           Get started by editing{' '}
@@ -67,3 +84,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home;

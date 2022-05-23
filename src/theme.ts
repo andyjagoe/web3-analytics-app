@@ -1,5 +1,4 @@
 import { createTheme } from '@mui/material/styles';
-import { PaletteOptions } from "@mui/material/styles/createPalette";
 
 // Create a theme instance.
 const theme = createTheme({

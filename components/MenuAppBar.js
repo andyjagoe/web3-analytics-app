@@ -1,19 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {AppBar, 
         Typography,
         Toolbar,
         IconButton,
         MenuItem,
         Menu,
-        Snackbar,
         Button,
         } from '@mui/material';
-import { AccountCircle } from '@mui/icons-material';
+import { AccountCircle } from '@mui/icons-material'
 import { useSession, signIn, signOut } from "next-auth/react"
+import Link from '../src/Link'
+import { useRouter } from 'next/router'
 
 
 export default function MenuAppBar() {
   const { data: session } = useSession()
+  const router = useRouter()
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -25,22 +27,6 @@ export default function MenuAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  // Handle copying and snackbar messages
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState(false);
-  const [snackbarKey, setSnackbarKey] = useState(false);
-  const handleSnackbarClick = (message, key) => {
-    setSnackbarMessage(message);
-    setSnackbarKey(key);
-    setOpenSnackbar(true);
-  };
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
   };
   
 
@@ -56,20 +42,37 @@ export default function MenuAppBar() {
           <Typography 
             variant="h6" 
             sx={{ flexGrow: 1 }}
-            onClick={() => {console.log('home')}}
+            onClick={() => {router.push('/')}}
           >
             web3analytics
           </Typography>
 
-            {session && (
-            <nav>                
-                <Typography 
-                    variant="body2"
-                    >
-                  {session.user?.email}
-                </Typography>
-            </nav>
-            )}
+          <nav>                
+            <Link 
+              variant="button" 
+              color="textPrimary" 
+              href="/dashboards"
+              sx={{ margin: '20px 10px', color: '#fff', textDecoration: 'none' }}
+            >
+            Dashboards
+            </Link>
+            <Link 
+              variant="button" 
+              color="textPrimary" 
+              href="/queries" 
+              sx={{ margin: '20px 10px', color: '#fff', textDecoration: 'none' }}
+            >
+            Queries
+            </Link>
+            <Link 
+              variant="button" 
+              color="textPrimary" 
+              href="/apps" 
+              sx={{ margin: '20px 20px 20px 10px', color: '#fff', textDecoration: 'none' }}
+            >
+            Apps
+            </Link>              
+          </nav>
 
             {!session && (
               <Button
@@ -106,22 +109,14 @@ export default function MenuAppBar() {
                     }}
                     open={open}
                     onClose={handleClose}
-                >                                        
+                >   
+                    <MenuItem disabled={true}>{session?.user?.email}</MenuItem>
                     <MenuItem onClick={() => { handleClose(); signOut() }}>Sign out</MenuItem>                
                 </Menu>
                 </div>
             )}            
         </Toolbar>
       </AppBar>
-
-      <Snackbar
-        anchorOrigin= {{ vertical: 'top', horizontal: 'center' }}
-        key={snackbarKey}
-        autoHideDuration={6000}
-        open={openSnackbar}
-        onClose={handleSnackbarClose}
-        message={snackbarMessage}
-      />
 
     </div>
   );

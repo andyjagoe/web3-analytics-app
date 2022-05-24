@@ -2,11 +2,11 @@ import * as React from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head'
 import Image from 'next/image'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import styles from '../styles/Home.module.css' assert { type: 'css' }
 
 const Home: NextPage = () => {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   return (
     <div className={styles.container}>
@@ -18,7 +18,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
 
-      {!session && (
+      {status != "loading" && status != "authenticated" && (
         <>
           <h1 className={styles.title}>
             Web3 Analytics

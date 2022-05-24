@@ -8,10 +8,10 @@ import {AppBar,
         Button,
         } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material'
-import { useSession, signIn, signOut } from "next-auth/react"
+import Avatar from '@mui/material/Avatar'
 import Link from '../src/Link'
 import { useRouter } from 'next/router'
-import Avatar from '@mui/material/Avatar'
+import { useSession, signIn, signOut } from "next-auth/react"
 
 
 export default function MenuAppBar() {

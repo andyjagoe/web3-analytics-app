@@ -11,7 +11,7 @@ import { AccountCircle } from '@mui/icons-material'
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from '../src/Link'
 import { useRouter } from 'next/router'
-import { blueGrey } from '@mui/material/colors'
+import Avatar from '@mui/material/Avatar'
 
 
 export default function MenuAppBar() {
@@ -96,7 +96,14 @@ export default function MenuAppBar() {
                     color="inherit"
                     sx={{ padding: '0' }}
                 >
+                    {session.user?.image?
+                    (<Avatar 
+                      alt={session.user?.name? session.user?.name : ''} 
+                      src={session.user?.image? session.user?.image : ''} 
+                    />)
+                    :
                     <AccountCircle />
+                    }                    
                 </IconButton>
                 <Menu
                     id="menu-appbar"

@@ -1,4 +1,5 @@
 import { createTheme } from '@mui/material/styles';
+import { blueGrey } from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = createTheme({
@@ -14,8 +15,19 @@ const theme = createTheme({
         main: '#b3001b',
         dark: '#7b0000',
         contrastText: '#fff',
+    },
+    connectButton: {
+      main: blueGrey[50]
     }
   }
 });
+
+declare module "@mui/material/styles/createPalette" {
+  export interface PaletteOptions {
+    connectButton: {
+      main: string;
+    };
+  }
+}
 
 export default theme;

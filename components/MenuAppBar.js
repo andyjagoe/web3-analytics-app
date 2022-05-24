@@ -11,6 +11,7 @@ import { AccountCircle } from '@mui/icons-material'
 import { useSession, signIn, signOut } from "next-auth/react"
 import Link from '../src/Link'
 import { useRouter } from 'next/router'
+import { blueGrey } from '@mui/material/colors'
 
 
 export default function MenuAppBar() {
@@ -44,7 +45,7 @@ export default function MenuAppBar() {
             sx={{ flexGrow: 1 }}
             onClick={() => {router.push('/')}}
           >
-            web3analytics
+            Web3 Analytics
           </Typography>
 
           <nav>                
@@ -77,7 +78,8 @@ export default function MenuAppBar() {
             {!session && (
               <Button
                 variant='outlined'
-                sx={{ margin: '20px 30px', color: '#FFFFFF' }}
+                color='connectButton'
+                sx={{ margin: '20px 0px', color: '#FFFFFF' }}
                 onClick={() => {signIn()}}
               >
                   Sign In
@@ -92,6 +94,7 @@ export default function MenuAppBar() {
                     aria-haspopup="true"
                     onClick={handleMenu}
                     color="inherit"
+                    sx={{ padding: '0' }}
                 >
                     <AccountCircle />
                 </IconButton>

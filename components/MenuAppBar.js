@@ -9,9 +9,12 @@ import {AppBar,
         Button,
         } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
+import { useSession, signIn, signOut } from "next-auth/react"
 
 
 export default function MenuAppBar() {
+  const { data: session } = useSession()
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -57,14 +60,57 @@ export default function MenuAppBar() {
           >
             web3analytics
           </Typography>
-          <Button
-              variant='outlined'
-              sx={{ margin: '20px 30px', color: '#FFFFFF' }}
-              onClick={() => {console.log('connect')}}
-          >
-              Connect Wallet
-          </Button>   
 
+            {session && (
+            <nav>                
+                <Typography 
+                    variant="body2"
+                    >
+                  {session.user?.email}
+                </Typography>
+            </nav>
+            )}
+
+            {!session && (
+              <Button
+                variant='outlined'
+                sx={{ margin: '20px 30px', color: '#FFFFFF' }}
+                onClick={() => {signIn()}}
+              >
+                  Sign In
+              </Button>   
+            )}
+
+            {session && (
+                <div>
+                <IconButton
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                >
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                >                                        
+                    <MenuItem onClick={() => { handleClose(); signOut() }}>Sign out</MenuItem>                
+                </Menu>
+                </div>
+            )}            
         </Toolbar>
       </AppBar>
 

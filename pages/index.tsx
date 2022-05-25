@@ -33,7 +33,7 @@ const Home: NextPage = () => {
             Analytics for Web3
           </Typography>
           <Typography variant="subtitle1" className={styles.description}>
-            Decentralized. Where users own their data.
+            Decentralized. And users own their data.
           </Typography>
         </>
       )}

@@ -52,7 +52,7 @@ export default function MenuAppBar() {
             <Link 
               variant="button" 
               color="textPrimary" 
-              href="/dashboards"
+              href="/dashboards/popular"
               sx={{ margin: '20px 10px', color: '#fff', textDecoration: 'none' }}
             >
             Dashboards
@@ -60,7 +60,7 @@ export default function MenuAppBar() {
             <Link 
               variant="button" 
               color="textPrimary" 
-              href="/queries" 
+              href="/queries/popular" 
               sx={{ margin: '20px 10px', color: '#fff', textDecoration: 'none' }}
             >
             Queries
@@ -68,7 +68,7 @@ export default function MenuAppBar() {
             <Link 
               variant="button" 
               color="textPrimary" 
-              href="/apps" 
+              href="/apps/popular" 
               sx={{ margin: '20px 20px 20px 10px', color: '#fff', textDecoration: 'none' }}
             >
             Apps

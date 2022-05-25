@@ -7,19 +7,19 @@ import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useSession } from "next-auth/react"
-import Link from '../src/Link'
-import MyTabs from '../components/MyTabs.jsx'
+import Link from '../../src/Link'
+import MyTabs from '../../components/MyTabs.jsx'
 
 
-const Apps: NextPage = () => {
+const PopularApps: NextPage = () => {
   const { data: session, status } = useSession()
   const theme = useTheme();
 
   return (
     <div>
       <Head>
-        <title>Web3 Analytics - Apps</title>
-        <meta name="description" content="Popular and trending apps that use decentralized web3 analytics." />
+        <title>Web3 Analytics - Popular Apps</title>
+        <meta name="description" content="Popular apps that use decentralized web3 analytics." />
       </Head>
 
       <Breadcrumbs aria-label="breadcrumb" sx={{ marginTop: theme.spacing(4)}}>
@@ -27,10 +27,10 @@ const Apps: NextPage = () => {
         <Typography color="textPrimary">Apps</Typography>
       </Breadcrumbs>
 
-      <MyTabs tabType="APPS" />
+      <MyTabs tabType="APPS" tabSelected={0} />     
 
     </div>
   )
 }
 
-export default Apps;
+export default PopularApps;

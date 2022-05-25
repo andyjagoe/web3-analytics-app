@@ -8,6 +8,7 @@ import {
 import {useTheme} from '@mui/material/styles'
 import PropTypes from 'prop-types';
 import { useSession } from "next-auth/react"
+import { useRouter } from 'next/router'
 
 
 function TabPanel(props) {
@@ -47,19 +48,34 @@ function a11yProps(index) {
     };
 }
 
-/*
-type MyTabsProps = {
-    tabType: string
-};
-*/
 
-const MyTabs = ({tabType}) => {
-    const { data: session, status } = useSession()
-    const theme = useTheme();
-    const [tabValue, setTabValue] = useState(0);
+const MyTabs = ({tabType, tabSelected}) => {
+    const { status } = useSession()
+    const theme = useTheme()
+    const router = useRouter()
+    const [tabValue, setTabValue] = useState(tabSelected);
+
 
     const handleChange = (event, newValue) => {
-        setTabValue(newValue);
+        const pathArray = router.asPath.split("/")
+        switch(newValue) {
+            case 0:
+                router.push(`/${pathArray[1]}/popular`)
+                break;
+            case 1:
+                router.push(`/${pathArray[1]}/trending`)
+                break;
+            case 2:
+                router.push(`/${pathArray[1]}/favorites`)
+                break;
+            case 3:
+                router.push(`/${pathArray[1]}/mine`)
+                break;
+            default:
+                router.push(`/${pathArray[1]}/popular`)
+                break;
+          }
+          setTabValue(newValue);
     };  
         
     return (
@@ -69,10 +85,10 @@ const MyTabs = ({tabType}) => {
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     {status != "loading" && status == "authenticated" && (
                         <Tabs value={tabValue} onChange={handleChange} aria-label="My, favorites, popular or trending tabs">
-                            <Tab label="My Apps" {...a11yProps(0)} />
-                            <Tab label="Favorites" {...a11yProps(1)} />
-                            <Tab label="Popular" {...a11yProps(2)} />
-                            <Tab label="Trending" {...a11yProps(3)} />
+                            <Tab label="Popular" {...a11yProps(0)} />
+                            <Tab label="Trending" {...a11yProps(1)} />
+                            <Tab label="Favorites" {...a11yProps(2)} />
+                            <Tab label="Mine" {...a11yProps(3)} />
                         </Tabs>
                     )}
                     {status != "loading" && status != "authenticated" && (
@@ -85,16 +101,16 @@ const MyTabs = ({tabType}) => {
                 {status != "loading" && status == "authenticated" && (
                     <>
                         <TabPanel value={tabValue} index={0}>
-                            Created by you: {tabType}
-                        </TabPanel>
-                        <TabPanel value={tabValue} index={1}>
-                            Favorites: {tabType}
-                        </TabPanel>                
-                        <TabPanel value={tabValue} index={2}>
                             Popular: {tabType}
                         </TabPanel>
-                        <TabPanel value={tabValue} index={3}>
+                        <TabPanel value={tabValue} index={1}>
                             Trending: {tabType}
+                        </TabPanel>                
+                        <TabPanel value={tabValue} index={2}>
+                            Favorites: {tabType}
+                        </TabPanel>
+                        <TabPanel value={tabValue} index={3}>
+                            Created by you: {tabType}
                         </TabPanel>                
                     </>
                 )}

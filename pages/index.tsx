@@ -20,23 +20,20 @@ const Home: NextPage = () => {
         <meta name="description" content="A decentralized analytics platform where users own their data." />
       </Head>
 
-      {status != "loading" && status != "authenticated" && (
-        <>
-          <Typography 
-            component="h1" 
-            variant="h2"             
-            sx={{ 
-              marginTop: theme.spacing(8),
-              textAlign: 'center'
-            }}
-          >
-            Analytics for Web3
-          </Typography>
-          <Typography variant="subtitle1" className={styles.description}>
-            Decentralized. And users own their data.
-          </Typography>
-        </>
-      )}
+      <Typography 
+        component="h1" 
+        variant="h2"             
+        sx={{ 
+          marginTop: theme.spacing(8),
+          textAlign: 'center'
+        }}
+      >
+        Analytics for Web3
+      </Typography>
+      <Typography variant="subtitle1" className={styles.description}>
+        Decentralized. And users own their data.
+      </Typography>
+
     </div>
   )
 }

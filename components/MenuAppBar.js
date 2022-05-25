@@ -41,7 +41,7 @@ export default function MenuAppBar() {
           </IconButton>
           */}
           <Typography 
-            variant="h6" 
+            variant="h6"
             sx={{ flexGrow: 1 }}
             onClick={() => {router.push('/')}}
           >

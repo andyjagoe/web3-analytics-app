@@ -9,11 +9,16 @@ import Head from 'next/head'
 import { useSession } from "next-auth/react"
 import Link from '../../src/Link'
 import MyTabs from '../../components/MyTabs.jsx'
+import LoadingPage from '../../components/LoadingPage.jsx'
 
 
 const TrendingApps: NextPage = () => {
   const { data: session, status } = useSession()
   const theme = useTheme();
+
+  if (status === "loading") {
+    return <LoadingPage />
+  }
 
   return (
     <div>

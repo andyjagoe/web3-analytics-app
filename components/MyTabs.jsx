@@ -80,7 +80,7 @@ const MyTabs = ({tabType, tabSelected}) => {
         
     return (
         <>
-            <Grid container spacing={2} sx={{ marginTop: theme.spacing(1)}} >
+            <Grid container spacing={2} sx={{ marginTop: theme.spacing(4)}} >
                 <Grid item xs={12}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     {status != "loading" && status == "authenticated" && (

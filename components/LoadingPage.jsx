@@ -5,7 +5,8 @@ import {
 import {useTheme} from '@mui/material/styles'
 
 const LoadingPage = () => {
-    const theme = useTheme();
+    const theme = useTheme()
+    
     return (
     <div className='loading'>
         <CircularProgress sx={{ marginTop: theme.spacing(8)}} />

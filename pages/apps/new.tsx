@@ -58,7 +58,7 @@ const NewApp: NextPage = () => {
         {
             onSuccess(data) {
                 console.log('Success', data)
-                //write to database to associated app with user
+                //write to database to associate app with user
 
                 //redirect to new app page
                 router.push('/apps/mine')
@@ -171,7 +171,7 @@ const NewApp: NextPage = () => {
                                 }
                                 id="network"
                                 label="Network"
-                                helperText={activeChain?.id !== chain.polygon.id ? 
+                                helperText={!chains.find(({ id }) => id === activeChain?.id) ?                                     
                                     "Network not supported. Switch to a supported network.":""
                                 }
                                 value={activeChain?.name}

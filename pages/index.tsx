@@ -1,7 +1,5 @@
-import * as React from 'react'
-import {Grid,
+import {
   Typography,
-  Button,
   } from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'

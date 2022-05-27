@@ -8,16 +8,22 @@ import { CacheProvider, EmotionCache } from '@emotion/react'
 import theme from '../src/theme'
 import createEmotionCache from '../src/createEmotionCache'
 import { SessionProvider } from "next-auth/react"
-import { WagmiConfig, createClient, defaultChains, configureChains } from 'wagmi'
+import { 
+  WagmiConfig, 
+  createClient, 
+  configureChains,
+} from 'wagmi'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import { getSupportedChains } from '../src/utilities.jsx'
 
 const alchemyId = process.env.ALCHEMY_ID
 
-const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
+const { chains, provider, webSocketProvider } = configureChains(
+  getSupportedChains(), [
   alchemyProvider({ alchemyId }),
   publicProvider(),
 ])

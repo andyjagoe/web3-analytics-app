@@ -6,7 +6,7 @@ import {
   TextField,
   Button
 } from '@mui/material'
-import { LockOutlined } from '@mui/icons-material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDiscord } from '@fortawesome/free-brands-svg-icons'
@@ -48,7 +48,6 @@ const Signin = ({ csrfToken, providers }) => {
 
       <Grid 
         container 
-        spacing={2} 
         direction="column"
         alignItems="center"
         justifyContent="center"
@@ -59,8 +58,10 @@ const Signin = ({ csrfToken, providers }) => {
             margin: theme.spacing(1),
             backgroundColor: theme.palette.secondary.main,
           }}>
-            <LockOutlined />
+            <LockOutlinedIcon />
           </Avatar>
+        </Grid>
+        <Grid item xs={12}>
           <Typography component="h1" variant="h5">
             Sign In
           </Typography>

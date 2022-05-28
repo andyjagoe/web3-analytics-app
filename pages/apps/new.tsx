@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Avatar,
   Breadcrumbs,
@@ -12,9 +13,10 @@ import {
     useDisconnect,
     useNetwork,
     useContractWrite,
-    chain
+    useSigner,
 } from 'wagmi'
-import Web3Analytics from "../../src/Web3Analytics.json"
+import { ethers } from "ethers"
+import Web3Analytics from "../../schema/Web3Analytics.json"
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration'
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import Alert from '@mui/material/Alert'
@@ -25,10 +27,15 @@ import { useSession, signIn } from "next-auth/react"
 import Link from '../../src/Link'
 import LoadingPage from '../../components/LoadingPage.jsx'
 import { useRouter } from 'next/router'
+import axios from 'axios'
 
 
 const NewApp: NextPage = () => {
     const theme = useTheme()
+    const [isAppRegistered, setIsAppRegistered] = useState(false);
+    const [appName, setAppName] = useState("");
+    const [appURL, setAppURL] = useState("");
+    const { data: signer } = useSigner()
     const { data: account } = useAccount()
     const { 
         connect, 
@@ -61,7 +68,7 @@ const NewApp: NextPage = () => {
                 //write to database to associate app with user
 
                 //redirect to new app page
-                router.push('/apps/mine')
+                //router.push('/apps/mine')
             },
         }
     )
@@ -74,6 +81,47 @@ const NewApp: NextPage = () => {
         },
     })
     
+
+    useEffect(() => {
+        if (signer) checkRegistration()
+    }, [signer]);
+
+
+    const checkRegistration = async () => {
+        if (!signer || !process.env.NEXT_PUBLIC_WEB3ANALYTICS) return        
+        const contract = new ethers.Contract(
+            process.env.NEXT_PUBLIC_WEB3ANALYTICS,
+            Web3Analytics,
+            signer
+        )
+        setIsAppRegistered(await contract.isAppRegistered(account?.address))
+    }
+
+    const putApp = async (address:string) => {
+        const response = await axios({
+            method: 'put',
+            url: '/api/app',
+            data: {
+                sk: address,
+                name: appName,
+                url: appURL,
+            }
+        })
+        console.log(response)
+        if (response.status === 201) {
+            //Success. Go to new app page
+            //TODO: Insert username in between /apps and /slug
+            //router.push(`/apps/${response.data.slug}`)
+            console.log("success")
+        }
+    }
+    
+    const isDisabled = () => {
+        if (isAppRegistered) return true
+        if (registerAppLoading) return true
+        return false
+    }
+
 
     if (status === "loading") {
         return <LoadingPage />
@@ -149,13 +197,40 @@ const NewApp: NextPage = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                name="name"
+                                variant="outlined"
+                                fullWidth
+                                id="name"
+                                label="App name"
+                                value={appName}
+                                onChange={e => setAppName(e.target.value)}
+                                inputProps={{ style: { fontSize: "0.95rem" } }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                name="url"
+                                variant="outlined"
+                                fullWidth
+                                id="url"
+                                label="App URL"
+                                value={appURL}
+                                onChange={e => setAppURL(e.target.value)}
+                                inputProps={{ style: { fontSize: "0.95rem" } }}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
                                 name="address"
                                 variant="outlined"
                                 disabled
+                                error={isAppRegistered}
                                 fullWidth
                                 id="address"
                                 label="Address"
-                                helperText="We recommend you create a new wallet address for your app."                                
+                                helperText={isAppRegistered? 
+                                    "App already registered for this address. Please choose another.":
+                                    "We recommend creating a dedicated wallet address for apps."}                         
                                 value={account?.address}
                                 inputProps={{ style: { fontSize: "0.95rem" } }}
                             />
@@ -201,9 +276,9 @@ const NewApp: NextPage = () => {
                             <Grid item xs={12}>
                                 <Button
                                     fullWidth
-                                    disabled={registerAppLoading}
+                                    disabled={isDisabled()}
                                     variant="contained"
-                                    onClick={() => registerAppWrite() }
+                                    onClick={() => putApp(account?.address as string) }
                                 >
                                     Register App
                                 </Button>

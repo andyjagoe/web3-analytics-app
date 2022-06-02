@@ -31,7 +31,7 @@ const FavoriteQueries: NextPage = () => {
 
       <PageNav category="Queries" />
 
-      <MyTabs tabType="QUERIES" tabSelected={2} />
+      <MyTabs tabType="QUERIES" tabSelected={1} />
 
     </div>
   )

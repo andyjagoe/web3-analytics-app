@@ -31,7 +31,7 @@ const FavoriteDashboards: NextPage = () => {
 
       <PageNav category="Dashboards" />
 
-      <MyTabs tabType="DASHBOARDS" tabSelected={2} />
+      <MyTabs tabType="DASHBOARDS" tabSelected={1} />
 
     </div>
   )

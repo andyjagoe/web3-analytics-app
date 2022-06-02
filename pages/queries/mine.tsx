@@ -31,7 +31,7 @@ const MyQueries: NextPage = () => {
 
       <PageNav category="Queries" />
 
-      <MyTabs tabType="QUERIES" tabSelected={3} />     
+      <MyTabs tabType="QUERIES" tabSelected={2} />     
 
     </div>
   )

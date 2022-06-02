@@ -31,7 +31,7 @@ const FavoriteApps: NextPage = () => {
 
       <PageNav category="Apps" />
 
-      <MyTabs tabType="APPS" tabSelected={2} />
+      <MyTabs tabType="APPS" tabSelected={1} />
 
     </div>
   )

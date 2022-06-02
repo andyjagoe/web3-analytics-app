@@ -63,12 +63,9 @@ const MyTabs = ({tabType, tabSelected}) => {
                 router.push(`/${pathArray[1]}/popular`)
                 break;
             case 1:
-                router.push(`/${pathArray[1]}/trending`)
-                break;
-            case 2:
                 router.push(`/${pathArray[1]}/favorites`)
                 break;
-            case 3:
+            case 2:
                 router.push(`/${pathArray[1]}/mine`)
                 break;
             default:
@@ -86,15 +83,13 @@ const MyTabs = ({tabType, tabSelected}) => {
                     {status != "loading" && status == "authenticated" && (
                         <Tabs value={tabValue} onChange={handleChange} aria-label="My, favorites, popular or trending tabs">
                             <Tab label="Popular" {...a11yProps(0)} />
-                            <Tab label="Trending" {...a11yProps(1)} />
-                            <Tab label="Favorites" {...a11yProps(2)} />
-                            <Tab label="Mine" {...a11yProps(3)} />
+                            <Tab label="Favorites" {...a11yProps(1)} />
+                            <Tab label="Created by Me" {...a11yProps(2)} />
                         </Tabs>
                     )}
                     {status != "loading" && status != "authenticated" && (
                         <Tabs value={tabValue} onChange={handleChange} aria-label="Popular or trending tabs">
                             <Tab label="Popular" {...a11yProps(0)} />
-                            <Tab label="Trending" {...a11yProps(1)} />
                         </Tabs>
                     )}
                 </Box>
@@ -104,12 +99,9 @@ const MyTabs = ({tabType, tabSelected}) => {
                             Popular: {tabType}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            Trending: {tabType}
-                        </TabPanel>                
-                        <TabPanel value={tabValue} index={2}>
                             Favorites: {tabType}
                         </TabPanel>
-                        <TabPanel value={tabValue} index={3}>
+                        <TabPanel value={tabValue} index={2}>
                             Created by you: {tabType}
                         </TabPanel>                
                     </>
@@ -119,9 +111,6 @@ const MyTabs = ({tabType, tabSelected}) => {
                         <TabPanel value={tabValue} index={0}>
                             Popular: {tabType}
                         </TabPanel>
-                        <TabPanel value={tabValue} index={1}>
-                            Trending: {tabType}
-                        </TabPanel>                
                     </>
                 )}
                 </Grid>

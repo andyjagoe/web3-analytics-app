@@ -7,12 +7,12 @@ import {
   Button,
   TextField,
 } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import {
     useAccount,
     useConnect,
     useDisconnect,
     useNetwork,
-    useContractWrite,
     useSigner,
 } from 'wagmi'
 import { ethers } from "ethers"
@@ -28,13 +28,19 @@ import Link from '../../src/Link'
 import LoadingPage from '../../components/LoadingPage.jsx'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import validUrl from 'valid-url'
 
 
 const NewApp: NextPage = () => {
     const theme = useTheme()
-    const [isAppRegistered, setIsAppRegistered] = useState(false);
-    const [appName, setAppName] = useState("");
-    const [appURL, setAppURL] = useState("");
+    const [isAppRegistered, setIsAppRegistered] = useState(false)
+    const [urlError, setUrlError] = useState(false)
+    const [appName, setAppName] = useState("")
+    const [appURL, setAppURL] = useState("")
+    const [previousSigner, setPreviousSigner] = useState({})
+    const [registerAppLoading, setRegisterAppLoading] = useState(false)
+    const [disable, setDisabled] = useState(false)
+    const [loading, setLoading] = useState(false)
     const { data: signer } = useSigner()
     const { data: account } = useAccount()
     const { 
@@ -51,27 +57,6 @@ const NewApp: NextPage = () => {
         pendingChainId,
         switchNetwork,
     } = useNetwork()
-    const { 
-        data: registerAppData, 
-        error: registerAppError,
-        isError: isRegisterAppError,
-        isLoading: registerAppLoading,
-        write: registerAppWrite } = useContractWrite(
-        {
-          addressOrName: process.env.NEXT_PUBLIC_WEB3ANALYTICS as string,
-          contractInterface: Web3Analytics,
-        },
-        'registerApp',
-        {
-            onSuccess(data) {
-                console.log('Success', data)
-                //write to database to associate app with user
-
-                //redirect to new app page
-                //router.push('/apps/mine')
-            },
-        }
-    )
     const { disconnect } = useDisconnect()
     const router = useRouter()
     const { data: session, status } = useSession({
@@ -83,8 +68,30 @@ const NewApp: NextPage = () => {
     
 
     useEffect(() => {
-        if (signer) checkRegistration()
-    }, [signer]);
+        if (signer && signer !== previousSigner) checkRegistration()
+        setDisabled(formValidation())
+    }, [signer, appName, appURL])
+
+
+    const formValidation = () => {   
+        if (checkUrl()
+            || appName == ""
+            ) {
+          return true
+        } else {
+          return false
+        }
+    }
+
+
+    const checkUrl = () => {
+        if (appURL !== "" && !validUrl.isWebUri(appURL)) {
+            setUrlError(true)
+            return true
+        }
+        setUrlError(false)
+        return false
+    }
 
 
     const checkRegistration = async () => {
@@ -95,30 +102,57 @@ const NewApp: NextPage = () => {
             signer
         )
         setIsAppRegistered(await contract.isAppRegistered(account?.address))
+        setPreviousSigner(signer)
     }
 
-    const putApp = async (address:string) => {
+    const registerAppOnChain = async () => {
+        if (!signer || !process.env.NEXT_PUBLIC_WEB3ANALYTICS) return
+
+        setRegisterAppLoading(true)
+        setLoading(true)
+
+        const contract = new ethers.Contract(
+            process.env.NEXT_PUBLIC_WEB3ANALYTICS,
+            Web3Analytics,
+            signer
+        )
+
+        try {
+            const tx = await contract.registerApp(appName, appURL)
+            await tx.wait()
+    
+            const response = await registerAppInDb(account?.address as string, appName)
+            if (response) router.push(`/apps/${session?.user?.id}/${response.data.slug}`)
+            
+            setRegisterAppLoading(false)
+            setLoading(false)    
+        } catch (error) {
+            console.log(error)
+            setRegisterAppLoading(false)
+            setLoading(false)    
+        }
+
+    }
+
+
+    const registerAppInDb = async (address:string, name:string) => {
         const response = await axios({
             method: 'put',
             url: '/api/app',
             data: {
                 sk: address,
-                name: appName,
-                url: appURL,
+                name: name,
             }
         })
-        console.log(response)
-        if (response.status === 201) {
-            //Success. Go to new app page
-            //TODO: Insert username in between /apps and /slug
-            //router.push(`/apps/${response.data.slug}`)
-            console.log("success")
-        }
+        if (response.status === 201) return response
+        
+        return null
     }
     
     const isDisabled = () => {
         if (isAppRegistered) return true
         if (registerAppLoading) return true
+        if (disable) return true
         return false
     }
 
@@ -197,6 +231,7 @@ const NewApp: NextPage = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                autoFocus
                                 name="name"
                                 variant="outlined"
                                 fullWidth
@@ -212,6 +247,7 @@ const NewApp: NextPage = () => {
                                 name="url"
                                 variant="outlined"
                                 fullWidth
+                                error={urlError}
                                 id="url"
                                 label="App URL"
                                 value={appURL}
@@ -274,14 +310,15 @@ const NewApp: NextPage = () => {
                         )}
                         {chains.find(({ id }) => id === activeChain?.id) && (
                             <Grid item xs={12}>
-                                <Button
+                                <LoadingButton
                                     fullWidth
                                     disabled={isDisabled()}
                                     variant="contained"
-                                    onClick={() => putApp(account?.address as string) }
+                                    loading={loading}
+                                    onClick={() => registerAppOnChain() }
                                 >
                                     Register App
-                                </Button>
+                                </LoadingButton>
                             </Grid>
                         )}
                         <Grid item xs={12}>
@@ -296,11 +333,6 @@ const NewApp: NextPage = () => {
                         </Grid>
                     </Grid>
 
-                    {isRegisterAppError && registerAppError && (
-                        <Alert severity="error" sx={{marginTop: theme.spacing(4)}}>
-                            {registerAppError.message}
-                        </Alert>
-                    )}
                 </>
                 )
             }

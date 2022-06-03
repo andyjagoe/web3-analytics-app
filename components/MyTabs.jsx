@@ -9,6 +9,7 @@ import {useTheme} from '@mui/material/styles'
 import PropTypes from 'prop-types';
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
+import MyApps from "./MyApps.jsx"
 
 
 function TabPanel(props) {
@@ -102,7 +103,16 @@ const MyTabs = ({tabType, tabSelected}) => {
                             Favorites: {tabType}
                         </TabPanel>
                         <TabPanel value={tabValue} index={2}>
-                            Created by you: {tabType}
+                            
+                            {(() => { 
+                                switch(tabType) {
+                                case 'APPS':
+                                    return <MyApps />                                            
+                                default:
+                                    return <>Created by you: {tabType}</>
+                                }
+                            })()}
+                
                         </TabPanel>                
                     </>
                 )}

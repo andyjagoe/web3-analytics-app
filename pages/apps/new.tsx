@@ -138,7 +138,7 @@ const NewApp: NextPage = () => {
     const registerAppInDb = async (address:string, name:string) => {
         const response = await axios({
             method: 'put',
-            url: '/api/app',
+            url: '/api/apps',
             data: {
                 sk: address,
                 name: name,

@@ -14,19 +14,20 @@ export default async function handler(req, res) {
             let mySlug = slug(req.body.name)
             const myDate = Date.now()
 
-            const slugItem = {
+            const item = {
                 pk: `USER#${session.user.id}`,
-                sk: `SLUG#${mySlug}`,
-                type: "SLUG",
+                sk: `APP#${mySlug}`,
+                type: "APP",
                 slug: mySlug,
                 address: req.body.sk,
+                stars: [],
                 createdAt: myDate,
             };
 
             try {
                 await dynamoDb.put({
                     TableName: tableName,
-                    Item: slugItem,
+                    Item: item,
                     ConditionExpression: "pk <> :pkVal AND sk <>  :skVal",
                     ExpressionAttributeValues: {
                         ":pkVal" : `USER#${session.user.id}`,
@@ -38,11 +39,11 @@ export default async function handler(req, res) {
                 if (error.name === "ConditionalCheckFailedException") {
                     //retry with slug guaranteed to be unique
                     mySlug = `${mySlug}-${myDate}`
-                    slugItem.sk = `SLUG#${mySlug}`
-                    slugItem.slug = mySlug
+                    item.sk = `APP#${mySlug}`
+                    item.slug = mySlug
                     await dynamoDb.put({
                         TableName: tableName,
-                        Item: slugItem,
+                        Item: item,
                         ConditionExpression: "pk <> :pkVal AND sk <>  :skVal",
                         ExpressionAttributeValues: {
                             ":pkVal" : `USER#${session.user.id}`,
@@ -51,29 +52,25 @@ export default async function handler(req, res) {
                     })    
                 }
             }
-
-            const item = {
-              pk: `USER#${session.user.id}`,
-              sk: `APP#${req.body.sk}`,
-              type: "APP",
-              slug: mySlug,
-              address: req.body.sk,
-              createdAt: myDate,
-            };
-        
-            await dynamoDb.put({
-                TableName: tableName,
-                Item: item,
-                ConditionExpression: "pk <> :pkVal AND sk <>  :skVal",
-                ExpressionAttributeValues: {
-                    ":pkVal" : `USER#${session.user.id}`,
-                    ":skVal": `APP#${req.body.sk}`
-                }
-            })    
         
             res.status(201).json(item)
           }
+
+          
+          if (req.method === 'GET') {
+            const data = await dynamoDb.get({
+                TableName: tableName,
+                Key: {
+                    pk: `USER#${session.user.id}`,
+                    sk: `APP#${req.query.sk}`
+                }
+            })
         
+            res.status(200).json(data)
+          }
+
+
+          /*
           if (req.method === 'GET') {
             const { Item } = await dynamoDb.get({
                 TableName: tableName,
@@ -85,6 +82,7 @@ export default async function handler(req, res) {
         
             res.status(200).json(Item)
           }
+          */
         
           /*
           if (req.method === 'POST') {

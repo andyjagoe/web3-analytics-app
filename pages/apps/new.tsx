@@ -6,6 +6,7 @@ import {
   Grid,
   Button,
   TextField,
+  Container,
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
@@ -122,7 +123,7 @@ const NewApp: NextPage = () => {
             await tx.wait()
     
             const response = await registerAppInDb(account?.address as string, appName)
-            if (response) router.push(`/apps/${session?.user?.id}/${response.data.slug}`)
+            if (response) router.push(`/users/${session?.user?.id}/${response.data.slug}`)
             
             setRegisterAppLoading(false)
             setLoading(false)    
@@ -175,6 +176,7 @@ const NewApp: NextPage = () => {
             <Typography color="textPrimary">New</Typography>
         </Breadcrumbs>
 
+        <Container maxWidth="xs">
         <Grid 
             container 
             direction="column"
@@ -337,6 +339,7 @@ const NewApp: NextPage = () => {
                 )
             }
 
+        </Container>
         </div>
     )}
 

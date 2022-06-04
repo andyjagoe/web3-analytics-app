@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Box,
   Tab,
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import MyApps from "./MyApps.jsx"
+import PopularApps from "./PopularApps.jsx"
 
 
 function TabPanel(props) {
@@ -97,13 +98,19 @@ const MyTabs = ({tabType, tabSelected}) => {
                 {status != "loading" && status == "authenticated" && (
                     <>
                         <TabPanel value={tabValue} index={0}>
-                            Popular: {tabType}
+                            {(() => { 
+                                switch(tabType) {
+                                case 'APPS':
+                                    return <PopularApps />                                            
+                                default:
+                                    return <>Popular: {tabType}</>
+                                }
+                            })()}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
                             Favorites: {tabType}
                         </TabPanel>
-                        <TabPanel value={tabValue} index={2}>
-                            
+                        <TabPanel value={tabValue} index={2}>                            
                             {(() => { 
                                 switch(tabType) {
                                 case 'APPS':
@@ -111,15 +118,21 @@ const MyTabs = ({tabType, tabSelected}) => {
                                 default:
                                     return <>Created by you: {tabType}</>
                                 }
-                            })()}
-                
+                            })()}                
                         </TabPanel>                
                     </>
                 )}
                 {status != "loading" && status != "authenticated" && (
                     <>
                         <TabPanel value={tabValue} index={0}>
-                            Popular: {tabType}
+                            {(() => { 
+                                switch(tabType) {
+                                case 'APPS':
+                                    return <PopularApps />                                            
+                                default:
+                                    return <>Popular: {tabType}</>
+                                }
+                            })()}
                         </TabPanel>
                     </>
                 )}

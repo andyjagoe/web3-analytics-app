@@ -21,14 +21,17 @@ export default async function handler(req, res) {
                 slug: mySlug,
                 address: req.body.sk,
                 stars: [],
+                starCount: 0,
                 createdAt: myDate,
+                GSI1PK: "APP",
+                GSI1SK: 0
             };
 
             try {
                 await dynamoDb.put({
                     TableName: tableName,
                     Item: item,
-                    ConditionExpression: "pk <> :pkVal AND sk <>  :skVal",
+                    ConditionExpression: "pk <> :pkVal AND sk <> :skVal",
                     ExpressionAttributeValues: {
                         ":pkVal" : `USER#${session.user.id}`,
                         ":skVal": `APP#${req.body.sk}`

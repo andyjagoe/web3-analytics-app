@@ -1,18 +1,18 @@
 import {
     Grid
 } from '@mui/material'  
-import useMyApps from "../hooks/useMyApps.jsx"
+import usePopularApps from "../hooks/usePopularApps.jsx"
 import ItemCell from "./ItemCell.jsx"
 
 
-const MyApps = () => {
-    const {myApps, isLoading} = useMyApps()
+const PopularApps = () => {
+    const {popularApps, isLoading} = usePopularApps()
     
     return (
         <Grid container spacing={0} direction="column">          
                 <Grid item xs={12}>
 
-                {!isLoading && myApps.Items?.map((item) => 
+                {!isLoading && popularApps.Items?.map((item) => 
                 (
                         <ItemCell key={item.slug} item={item} />
                 ))
@@ -22,4 +22,4 @@ const MyApps = () => {
     )
 }
 
-export default MyApps;  
+export default PopularApps;  

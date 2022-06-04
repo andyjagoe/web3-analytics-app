@@ -4,7 +4,8 @@ import {
   Typography,
   Grid,
   TextField,
-  Button
+  Button,
+  Container
 } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import GitHubIcon from '@mui/icons-material/GitHub'
@@ -68,6 +69,7 @@ const Signin = ({ csrfToken, providers }) => {
         </Grid>
       </Grid>
 
+      <Container maxWidth="xs">
       {Object.values(providers).map((provider) => {
         return (
           <div key={provider.id}>
@@ -166,6 +168,7 @@ const Signin = ({ csrfToken, providers }) => {
         );
       })}
 
+    </Container>
     </div>
 
 

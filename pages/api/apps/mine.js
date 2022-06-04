@@ -11,10 +11,12 @@ export default async function handler(req, res) {
         if (req.method === 'GET') {
             const data = await dynamoDb.query({
                 TableName: tableName,
+                IndexName: 'createdAt-index',
                 KeyConditionExpression: "pk = :pkVal",
                 ExpressionAttributeValues: {
                     ":pkVal" : `USER#${session.user.id}`,
                 },
+                ScanIndexForward: false
             })
         
             res.status(200).json(data)

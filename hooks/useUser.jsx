@@ -1,19 +1,15 @@
-import { useSession } from "next-auth/react"
 import useSWR from 'swr'
 import axios from 'axios'
 
 
-
-export default function useMyApps() {
-    const { data: session } = useSession()
-
+export default function useUser(userId) {
     const fetcher = url => axios.get(url).then(res => res.data)
 
     const { data: data, error: myError } = useSWR(
-        () => session ? ['/api/apps/mine', session.user.id] : null, fetcher)
+        `/api/users/${userId}`, fetcher)
     
     return {
-      myApps: data,
+      myUser: data,
       isLoading: !myError && !data,
       isError: myError
     }

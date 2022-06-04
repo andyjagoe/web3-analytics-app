@@ -7,14 +7,12 @@ import Link from '../../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import useUser from "../../../../hooks/useUser.jsx"
 
   
   const AppPage: NextPage = () => {
   const theme = useTheme()
-  const { data: session, status } = useSession()
   const router = useRouter()
   const { userId, appSlug } = router.query
   const {myUser} = useUser(userId)

@@ -10,7 +10,7 @@ const MyApps = () => {
     
     return (
         <Grid container spacing={0} direction="column">          
-                <Grid item xs={12}>
+            <Grid item xs={12}>
 
                 {!isLoading && myApps.Items?.map((item) => 
                 (

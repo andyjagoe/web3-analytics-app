@@ -7,14 +7,12 @@ import Link from '../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import useUser from "../../../hooks/useUser.jsx"
 
   
   const UserPage: NextPage = () => {
   const theme = useTheme()
-  const { data: session, status } = useSession()
   const router = useRouter()
   const { userId } = router.query
   const {myUser} = useUser(userId)
@@ -22,7 +20,7 @@ import useUser from "../../../hooks/useUser.jsx"
   return (
     <div>
       <Head>
-        <title>Web3 Analytics</title>
+        <title>Web3 Analytics - {myUser?.Item?.name? myUser.Item.name:userId}</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />
       </Head>
 

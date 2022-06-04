@@ -10,7 +10,7 @@ const PopularApps = () => {
     
     return (
         <Grid container spacing={0} direction="column">          
-                <Grid item xs={12}>
+            <Grid item xs={12}>
 
                 {!isLoading && popularApps.Items?.map((item) => 
                 (

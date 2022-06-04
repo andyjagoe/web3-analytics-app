@@ -6,14 +6,50 @@ import {Card,
     Button
 } from '@mui/material'
 import StarIcon from '@mui/icons-material/Star'
+import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import {useTheme} from '@mui/material/styles'
+import axios from 'axios'
 import Link from '../src/Link'
 import useUser from "../hooks/useUser.jsx"
+import useStars from "../hooks/useStars.jsx"
+import { useSession } from "next-auth/react"
+import { useSWRConfig } from 'swr'
   
 
 const ItemCell = ({item}) => {
     const theme = useTheme()
+    const { mutate } = useSWRConfig()
+    const { data: session } = useSession()
     const {myUser} = useUser(item.pk.substring(5))
+    const itemCellType = item.sk.split("#")[0] || null
+    const matchString = `STAR#${itemCellType}#${item.pk.substring(5)}#${item.slug}`
+    const {myStars} = useStars(itemCellType)
+
+    const starItem = async () => {
+        const response = await axios({
+            method: 'put',
+            url: `/api/users/${item.pk.substring(5)}/${item.slug}/star`
+        })
+        if (response.status === 201) {
+            mutate(['/api/stars', session.user.id, itemCellType])
+            return response
+        }
+        
+        return null
+    }
+
+    const unstarItem = async () => {
+        const response = await axios({
+            method: 'delete',
+            url: `/api/users/${item.pk.substring(5)}/${item.slug}/star`
+        })
+        if (response.status === 204) {
+            mutate(['/api/stars', session.user.id, itemCellType])
+            return response
+        }
+
+        return null
+    }
 
     return (
     <>
@@ -67,9 +103,22 @@ const ItemCell = ({item}) => {
                         </Stack>
                     </Grid>
                     <Grid item xs={2} sx={{textAlign:"right"}}>
-                        <Button startIcon={<StarIcon />}>
+                        {myStars?.Items?.some(item => item.sk === 
+                                    matchString)?
+                        <Button 
+                            startIcon={<StarIcon />}
+                            onClick={()=> {unstarItem()}}
+                        >
                             {item.starCount}
-                        </Button>                        
+                        </Button>
+                        :
+                        <Button 
+                            startIcon={<StarBorderOutlinedIcon />}
+                            onClick={()=> {starItem()}}
+                        >
+                            {item.starCount}
+                        </Button>
+                    }       
                     </Grid>
                 </Grid>
             </CardContent>

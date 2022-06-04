@@ -14,7 +14,7 @@ const MyApps = () => {
 
                 {!isLoading && myApps.Items?.map((item) => 
                 (
-                        <ItemCell key={item.slug} item={item} />
+                    <ItemCell key={item.slug} item={item} />
                 ))
             }            
             </Grid>

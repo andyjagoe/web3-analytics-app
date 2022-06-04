@@ -1,14 +1,25 @@
 import { getSession } from "next-auth/react"
-import dynamoDb from '../../../lib/dynamo-db'
+import dynamoDb from '../../lib/dynamo-db'
 
 const tableName = "web3analytics"
 
-export default async function handler(req, res) {    
+export default async function handler(req, res) {
     const session = await getSession({ req })
 
     if (session) {
+        // Signed in
 
         if (req.method === 'GET') {
+            const type = req.query.type
+            let skVal
+            switch(type) {
+                case "APP":
+                    skVal = "STAR#APP#"
+                    break
+                default:
+                    skVal = "STAR#"
+            }
+
             const data = await dynamoDb.query({
                 TableName: tableName,
                 KeyConditionExpression: "pk = :pkVal AND begins_with(#sk, :skVal)",
@@ -17,14 +28,14 @@ export default async function handler(req, res) {
                 },
                 ExpressionAttributeValues: {
                     ":pkVal" : `USER#${session.user.id}`,
-                    ":skVal" : "APP#",
+                    ":skVal" : skVal
                 },
                 ScanIndexForward: false
             })
         
             res.status(200).json(data)
         }
-
+          
     } else {
         // Not Signed in
         res.status(401)

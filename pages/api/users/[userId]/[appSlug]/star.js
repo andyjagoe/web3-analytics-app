@@ -37,7 +37,7 @@ export default async function handler(req, res) {
                         pk: `USER#${userId}`,
                         sk: `APP#${appSlug}`
                     },
-                    UpdateExpression: "SET #starCount = #starCount + :incVal",
+                    UpdateExpression: "SET #starCount = #starCount + :incVal, GSI1SK = GSI1SK + :incVal",
                     ExpressionAttributeNames: { "#starCount": "starCount" },
                     ExpressionAttributeValues: { ":incVal": 1 }
                 })
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
                     pk: `USER#${userId}`,
                     sk: `APP#${appSlug}`
                 },
-                UpdateExpression: "SET #starCount = #starCount - :decVal",
+                UpdateExpression: "SET #starCount = #starCount - :decVal, GSI1SK = GSI1SK - :decVal",
                 ExpressionAttributeNames: { "#starCount": "starCount" },
                 ExpressionAttributeValues: { ":decVal": 1 }
             })

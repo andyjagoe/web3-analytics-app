@@ -32,6 +32,8 @@ const ItemCell = ({item}) => {
         })
         if (response.status === 201) {
             mutate(['/api/stars', session.user.id, itemCellType])
+            mutate('/api/apps/popular')          
+            mutate(['/api/apps/mine', session.user.id])    
             return response
         }
         
@@ -45,6 +47,8 @@ const ItemCell = ({item}) => {
         })
         if (response.status === 204) {
             mutate(['/api/stars', session.user.id, itemCellType])
+            mutate('/api/apps/popular')
+            mutate(['/api/apps/mine', session.user.id])    
             return response
         }
 

@@ -29,7 +29,19 @@ export default async function handler(req, res) {
                         ":pkVal" : `USER#${session.user.id}`,
                         ":skVal": `STAR#APP#${userId}#${appSlug}`
                     }
-                })        
+                })
+
+                await dynamoDb.update({
+                    TableName: tableName,
+                    Key: {
+                        pk: `USER#${userId}`,
+                        sk: `APP#${appSlug}`
+                    },
+                    UpdateExpression: "SET #starCount = #starCount + :incVal",
+                    ExpressionAttributeNames: { "#starCount": "starCount" },
+                    ExpressionAttributeValues: { ":incVal": 1 }
+                })
+    
             } catch (error) {
                 console.log(error)
                 if (error.name === "ConditionalCheckFailedException") {
@@ -50,6 +62,17 @@ export default async function handler(req, res) {
                     sk: `STAR#APP#${userId}#${appSlug}`,
                 }
             });
+
+            await dynamoDb.update({
+                TableName: tableName,
+                Key: {
+                    pk: `USER#${userId}`,
+                    sk: `APP#${appSlug}`
+                },
+                UpdateExpression: "SET #starCount = #starCount - :decVal",
+                ExpressionAttributeNames: { "#starCount": "starCount" },
+                ExpressionAttributeValues: { ":decVal": 1 }
+            })
         
             res.status(204).json({});
           }

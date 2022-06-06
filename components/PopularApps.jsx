@@ -14,7 +14,7 @@ const PopularApps = () => {
 
                 {!isLoading && popularApps.Items?.map((item) => 
                 (
-                        <ItemCell key={item.slug} item={item} />
+                        <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
                 ))
             }            
             </Grid>

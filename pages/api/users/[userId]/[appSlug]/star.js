@@ -74,7 +74,7 @@ export default async function handler(req, res) {
                 ExpressionAttributeValues: { ":decVal": 1 }
             })
         
-            res.status(204).json({});
+            res.status(204);
           }
           
     } else {

@@ -23,7 +23,8 @@ export default async function handler(req, res) {
                 starCount: 0,
                 createdAt: myDate,
                 GSI1PK: "APP",
-                GSI1SK: 0
+                GSI1SK: 0,
+                GSI2PK: `USER#${session.user.id}#APP`,
             };
 
             try {

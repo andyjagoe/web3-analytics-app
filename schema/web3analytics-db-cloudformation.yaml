@@ -11,36 +11,17 @@ Resources:
           AttributeType: S
         - AttributeName: sk
           AttributeType: S
-        - AttributeName: createdAt
-          AttributeType: N
-        - AttributeName: starCount
-          AttributeType: N
         - AttributeName: GSI1PK
           AttributeType: S
         - AttributeName: GSI1SK
           AttributeType: N
+        - AttributeName: GSI2PK
+          AttributeType: S
       KeySchema:
         - AttributeName: pk
           KeyType: HASH
         - AttributeName: sk
           KeyType: RANGE
-      LocalSecondaryIndexes:
-        - IndexName: createdAt-index
-          Projection:
-            ProjectionType: ALL
-          KeySchema:
-            - AttributeName: pk
-              KeyType: HASH
-            - AttributeName: createdAt
-              KeyType: RANGE
-        - IndexName: starCount-index
-          Projection:
-            ProjectionType: ALL
-          KeySchema:
-            - AttributeName: pk
-              KeyType: HASH
-            - AttributeName: starCount
-              KeyType: RANGE
       GlobalSecondaryIndexes:
         - IndexName: GSI1
           Projection:
@@ -52,4 +33,15 @@ Resources:
               KeyType: RANGE
           ProvisionedThroughput:
             ReadCapacityUnits: 1
-            WriteCapacityUnits: 1              
+            WriteCapacityUnits: 1             
+        - IndexName: GSI2
+          Projection:
+            ProjectionType: ALL
+          KeySchema:
+            - AttributeName: GSI2PK
+              KeyType: HASH
+            - AttributeName: GSI1SK
+              KeyType: RANGE
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1                          

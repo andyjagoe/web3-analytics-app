@@ -20,7 +20,6 @@ export default async function handler(req, res) {
                 type: "APP",
                 slug: mySlug,
                 address: req.body.sk,
-                stars: [],
                 starCount: 0,
                 createdAt: myDate,
                 GSI1PK: "APP",
@@ -73,52 +72,6 @@ export default async function handler(req, res) {
           }
 
 
-          /*
-          if (req.method === 'GET') {
-            const { Item } = await dynamoDb.get({
-                TableName: tableName,
-                Key: {
-                    pk: `USER#${session.user.id}`,
-                    sk: `APP#${req.query.sk}`
-                }
-            })
-        
-            res.status(200).json(Item)
-          }
-          */
-        
-          /*
-          if (req.method === 'POST') {
-            const { Attributes } = await dynamoDb.update({
-                TableName: tableName,
-                Key: {
-                    pk: req.query.pk,
-                    sk: req.query.sk
-                },
-                UpdateExpression: 'SET content = :content',
-                ExpressionAttributeValues: {
-                    ':content': req.body.content || null
-                },
-                ReturnValues: 'ALL_NEW'
-            });
-        
-            res.status(200).json(Attributes);
-          }
-          */
-        
-          /*
-          if (req.method === 'DELETE') {
-            await dynamoDb.delete({
-                TableName: tableName,
-                Key: {
-                    pk: req.query.pk,
-                    sk: req.query.sk
-                }
-            });
-        
-            res.status(204).json({});
-          }
-          */
     } else {
         // Not Signed in
         res.status(401)

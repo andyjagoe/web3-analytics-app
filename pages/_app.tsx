@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import Head from 'next/head';
 import { AppProps } from 'next/app'
-import Layout from '../components/layout'
+import Layout from '../components/Layout.js'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { CacheProvider, EmotionCache } from '@emotion/react'

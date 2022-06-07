@@ -108,7 +108,6 @@ const Signin = ({ csrfToken, providers }) => {
                 <Grid item xs={12}>
                     <TextField
                         id={`input-email-for-${provider.id}-provider`}
-                        autoFocus
                         name="email"
                         type="email"
                         variant="outlined"

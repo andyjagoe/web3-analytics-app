@@ -6,7 +6,7 @@ export function getSupportedChains() {
     if (process.env.NEXT_PUBLIC_CHAINS === "PRODUCTION") {
         return [chain.polygon]
     }
-    return [chain.polygon, chain.polygonMumbai, chain.rinkeby, chain.hardhat]
+    return [chain.rinkeby, chain.hardhat]
 }
 
 export function getShortAddress(address) {

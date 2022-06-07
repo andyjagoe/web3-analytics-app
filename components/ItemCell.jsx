@@ -33,7 +33,8 @@ const ItemCell = ({item}) => {
         if (response.status === 201) {
             mutate(['/api/stars', session.user.id, itemCellType])
             mutate('/api/apps/popular')          
-            mutate(['/api/apps/mine', session.user.id])    
+            mutate(['/api/apps/mine', session.user.id])
+            mutate(['/api/apps/favorites', session.user.id])   
             return response
         }
         
@@ -49,6 +50,7 @@ const ItemCell = ({item}) => {
             mutate(['/api/stars', session.user.id, itemCellType])
             mutate('/api/apps/popular')
             mutate(['/api/apps/mine', session.user.id])    
+            mutate(['/api/apps/favorites', session.user.id])   
             return response
         }
 

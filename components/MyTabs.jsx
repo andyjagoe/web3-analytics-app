@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
 import MyApps from "./MyApps.jsx"
 import PopularApps from "./PopularApps.jsx"
+import MyFavorites from "./MyFavorites.jsx"
 
 
 function TabPanel(props) {
@@ -108,7 +109,14 @@ const MyTabs = ({tabType, tabSelected}) => {
                             })()}
                         </TabPanel>
                         <TabPanel value={tabValue} index={1}>
-                            Favorites: {tabType}
+                            {(() => { 
+                                switch(tabType) {
+                                case 'APPS':
+                                    return <MyFavorites />                                            
+                                default:
+                                    return <>Favorites: {tabType}</>
+                                }
+                            })()}                
                         </TabPanel>
                         <TabPanel value={tabValue} index={2}>                            
                             {(() => { 

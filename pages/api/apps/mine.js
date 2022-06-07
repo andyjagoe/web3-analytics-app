@@ -9,20 +9,6 @@ export default async function handler(req, res) {
     if (session) {
 
         if (req.method === 'GET') {
-            /*
-            const data = await dynamoDb.query({
-                TableName: tableName,
-                KeyConditionExpression: "pk = :pkVal AND begins_with(#sk, :skVal)",
-                ExpressionAttributeNames:{
-                    "#sk": "sk",
-                },
-                ExpressionAttributeValues: {
-                    ":pkVal" : `USER#${session.user.id}`,
-                    ":skVal" : "APP#",
-                },
-                ScanIndexForward: false
-            })
-            */
             const data = await dynamoDb.query({
                 TableName: tableName,
                 IndexName: 'GSI2',

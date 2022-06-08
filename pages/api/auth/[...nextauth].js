@@ -45,7 +45,8 @@ export default NextAuth({
     }),
   ],
   adapter: DynamoDBAdapter(
-    client
+    client,
+    { tableName: process.env.NEXT_AUTH_DB }
   ),
   session: { 
     strategy: "jwt" 

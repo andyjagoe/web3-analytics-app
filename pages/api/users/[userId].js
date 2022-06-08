@@ -1,6 +1,7 @@
 import dynamoDb from '../../../lib/dynamo-db'
 
-const tableName = "next-auth"
+const tableName = process.env.NEXT_AUTH_DB
+
 
 export default async function handler(req, res) {
     const { userId } = req.query

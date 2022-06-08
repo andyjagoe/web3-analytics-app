@@ -12,7 +12,7 @@ import axios from 'axios'
 import Link from '../src/Link'
 import useUser from "../hooks/useUser.jsx"
 import useStars from "../hooks/useStars.jsx"
-import { useSession } from "next-auth/react"
+import { useSession, signIn } from "next-auth/react"
 import { useSWRConfig } from 'swr'
   
 
@@ -113,6 +113,7 @@ const ItemCell = ({item}) => {
                                     matchString)?
                         <Button 
                             startIcon={<StarIcon />}
+                            disabled={session? false:true}
                             onClick={()=> {unstarItem()}}
                         >
                             {item.starCount}
@@ -120,6 +121,7 @@ const ItemCell = ({item}) => {
                         :
                         <Button 
                             startIcon={<StarBorderOutlinedIcon />}
+                            disabled={session? false:true}
                             onClick={()=> {starItem()}}
                         >
                             {item.starCount}

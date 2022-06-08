@@ -126,7 +126,7 @@ const NewApp: NextPage = () => {
             const tx = await contract.registerApp(appName, appURL)
             await tx.wait()
     
-            const response = await registerAppInDb(account?.address as string, appName)
+            const response = await registerAppInDb(account?.address as string, appName, 0)
             if (response) router.push(`/users/${session?.user?.id}/${response.data.slug}`)
             
             setRegisterAppLoading(false)
@@ -140,7 +140,7 @@ const NewApp: NextPage = () => {
     }
 
 
-    const registerAppInDb = async (address:string, name:string) => {
+    const registerAppInDb = async (address:string, name:string, retries:number) => {
         const response = await axios({
             method: 'put',
             url: '/api/apps',
@@ -150,6 +150,9 @@ const NewApp: NextPage = () => {
             }
         })
         if (response.status === 201) return response
+        if ((retries < 5) && (response.status === 500 || response.status === 504)) {
+            registerAppInDb(address, name, retries++)
+        }
         
         return null
     }

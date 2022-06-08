@@ -6,17 +6,17 @@ import ItemCell from "./ItemCell.jsx"
 
 
 const MyFavorites = () => {
-    const {myFavorites, isLoading} = useMyFavorites()
+    const {myFavorites, isLoading, isError} = useMyFavorites()
     
     return (
         <Grid container spacing={0} direction="column">          
             <Grid item xs={12}>
 
-                {!isLoading && myFavorites?.map((item) => 
+                {!isLoading && !isError && myFavorites.map((item) => 
                 (
                     <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
-                ))
-            }            
+                ))}
+
             </Grid>
       </Grid>
     )

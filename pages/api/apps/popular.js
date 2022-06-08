@@ -1,6 +1,7 @@
 import dynamoDb from '../../../lib/dynamo-db'
 
-const tableName = "web3analytics"
+const tableName = process.env.WEB3ANALYTICS_DYNAMODB
+
 
 export default async function handler(req, res) {    
 

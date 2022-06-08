@@ -102,7 +102,11 @@ const NewApp: NextPage = () => {
             Web3Analytics,
             signer
         )
-        setIsAppRegistered(await contract.isAppRegistered(account?.address))
+        try {
+            setIsAppRegistered(await contract.isAppRegistered(account?.address))
+        } catch (error) {
+            console.log(error)
+        }
         setPreviousSigner(signer)
     }
 

@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 import useUser from "../../../../hooks/useUser.jsx"
 
   
-  const AppPage: NextPage = () => {
+const AppPage: NextPage = () => {
   const theme = useTheme()
   const router = useRouter()
   const { userId, appSlug } = router.query
@@ -35,6 +35,15 @@ import useUser from "../../../../hooks/useUser.jsx"
             <Typography color="textPrimary">{ appSlug }</Typography>
           </Breadcrumbs>
         </Grid>
+      </Grid>
+    </Grid>
+
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="body2">
+        </Typography>              
+        <Typography component="h1" variant="h3">
+        </Typography>
       </Grid>
     </Grid>
 

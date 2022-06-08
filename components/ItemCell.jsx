@@ -12,7 +12,8 @@ import axios from 'axios'
 import Link from '../src/Link'
 import useUser from "../hooks/useUser.jsx"
 import useStars from "../hooks/useStars.jsx"
-import { useSession, signIn } from "next-auth/react"
+import useAppData from "../hooks/useAppData.jsx"
+import { useSession } from "next-auth/react"
 import { useSWRConfig } from 'swr'
   
 
@@ -20,6 +21,7 @@ const ItemCell = ({item}) => {
     const theme = useTheme()
     const { mutate } = useSWRConfig()
     const { data: session } = useSession()
+    const {myAppData} = useAppData(item.address)
     const {myUser} = useUser(item.pk.substring(5))
     const itemCellType = item.sk.split("#")[0] || null
     const matchString = `STAR#${itemCellType}#${item.pk.substring(5)}#${item.slug}`
@@ -94,7 +96,7 @@ const ItemCell = ({item}) => {
                                     color="inherit" 
                                     href={`/users/${item.pk.substring(5)}/${item.slug}`}
                                 >
-                                    {item.slug}
+                                    {myAppData? myAppData.appName:item.slug}
                                 </Link>
                                 <div>
                                     Created by&nbsp; 

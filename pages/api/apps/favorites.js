@@ -32,17 +32,18 @@ export default async function handler(req, res) {
                     }
                 )
             }
-            if (keys.length === 0) res.status(200).json({})
 
-            var params = {
-                RequestItems: {
-                    web3analytics: {
-                        Keys: keys.slice(0,100)
+            let data = {}
+            if (keys.length > 0) {
+                const params = {
+                    RequestItems: {
+                        [tableName]: {
+                            Keys: keys.slice(0,100)
+                        }
                     }
                 }
+                data = await dynamoDb.batchGet(params)                    
             }
-
-            const data = await dynamoDb.batchGet(params)
             
             res.status(200).json(data)
         }

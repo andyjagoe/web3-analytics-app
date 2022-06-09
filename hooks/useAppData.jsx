@@ -7,7 +7,7 @@ import Web3Analytics from "../schema/Web3Analytics.json"
 
 export default function useAppData(appAddress) {
     const { data: session } = useSession()
-    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_NODE_URL);
+    const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_NODE_URL);
 
 
     const fetcher = async (...args) => {    

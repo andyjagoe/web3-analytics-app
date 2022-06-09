@@ -1,5 +1,6 @@
 import {
-    Grid
+    Grid,
+    Typography,
 } from '@mui/material'  
 import useMyFavorites from "../hooks/useMyFavorites.jsx"
 import ItemCell from "./ItemCell.jsx"
@@ -16,6 +17,12 @@ const MyFavorites = () => {
                 (
                     <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
                 ))}
+
+                {!isLoading && isError &&
+                    <Typography variant="subtitle1">
+                        You haven't starred any apps yet.
+                    </Typography>              
+                }
 
             </Grid>
       </Grid>

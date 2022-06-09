@@ -3,10 +3,12 @@ import {
 } from 'wagmi'
 
 export function getSupportedChains() {
-    if (process.env.NEXT_PUBLIC_CHAINS === "PRODUCTION") {
-        return [chain.polygon]
+    const chainNames = JSON.parse(process.env.NEXT_PUBLIC_CHAINS)
+    const chains = []
+    for (const name of chainNames) {
+        chains.push(chain[name])
     }
-    return [chain.rinkeby, chain.hardhat]
+    return chains
 }
 
 export function getShortAddress(address) {

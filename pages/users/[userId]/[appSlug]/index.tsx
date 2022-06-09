@@ -9,6 +9,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import useUser from "../../../../hooks/useUser.jsx"
+import useApp from "../../../../hooks/useApp.jsx"
 
   
 const AppPage: NextPage = () => {
@@ -16,6 +17,7 @@ const AppPage: NextPage = () => {
   const router = useRouter()
   const { userId, appSlug } = router.query
   const {myUser} = useUser(userId)
+  const {myApp} = useApp(userId, appSlug)
 
   return (
     <div>
@@ -32,7 +34,7 @@ const AppPage: NextPage = () => {
             <Link color="inherit" href={`/users/${userId}`}>
               {myUser?.Item?.name? myUser.Item.name:userId}
             </Link>
-            <Typography color="textPrimary">{ appSlug }</Typography>
+            <Typography color="textPrimary">{myApp? myApp.appName:appSlug}</Typography>
           </Breadcrumbs>
         </Grid>
       </Grid>
@@ -48,7 +50,7 @@ const AppPage: NextPage = () => {
     </Grid>
 
     <Typography variant="subtitle1">
-      App page: { appSlug }
+      App page: {myApp? myApp.appName:appSlug}
     </Typography>
 
     </div>

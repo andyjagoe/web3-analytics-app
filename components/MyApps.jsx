@@ -21,7 +21,7 @@ const MyApps = () => {
 
                 {!isLoading && myApps.Items?.length === 0 &&
                     <Typography variant="subtitle1">
-                        You haven't created any apps.&nbsp; 
+                        You haven&apos;t created any apps.&nbsp; 
                         <Link color="inherit" href="/apps/new">Create one now</Link>
                     </Typography>              
                 }

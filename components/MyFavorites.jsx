@@ -20,7 +20,7 @@ const MyFavorites = () => {
 
                 {!isLoading && isError &&
                     <Typography variant="subtitle1">
-                        You haven't starred any apps yet.
+                        You haven&apos;t starred any apps yet.
                     </Typography>              
                 }
 

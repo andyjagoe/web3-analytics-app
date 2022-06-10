@@ -8,6 +8,8 @@ export default function useMyFavorites() {
     const { data: session } = useSession()
 
     const fetcher = url => axios.get(url).then(res => {
+      if (res.data.Responses.length === 0) return res.data    
+
       const keyName = Object.keys(res.data.Responses)[0]
       const sorted = res.data?.Responses?.[keyName].sort((a, b) => {
         return b.starCount - a.starCount

@@ -13,12 +13,12 @@ const MyFavorites = () => {
         <Grid container spacing={0} direction="column">          
             <Grid item xs={12}>
 
-                {!isLoading && !isError && myFavorites.map((item) => 
+                {!isLoading && !isError && myFavorites?.length > 0 && myFavorites.map((item) => 
                 (
                     <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
                 ))}
 
-                {!isLoading && myFavorites?.length === 0 &&
+                {!isLoading && !isError && myFavorites?.Responses?.length === 0 &&
                     <Typography variant="subtitle1">
                         You haven&apos;t starred any apps yet.
                     </Typography>              

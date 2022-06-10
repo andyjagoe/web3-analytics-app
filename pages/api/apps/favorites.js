@@ -45,7 +45,8 @@ export default async function handler(req, res) {
                 }
                 data = await dynamoDb.batchGet(params)                    
             }
-            
+            if (!data.Responses) data.Responses = []
+
             res.status(200).json(data)
         }
 

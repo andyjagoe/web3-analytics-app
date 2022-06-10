@@ -3,7 +3,6 @@ import {
     Typography,
     Grid,
     Avatar,
-    Container
 } from '@mui/material'
 import Link from '../../../src/Link'
 import {useTheme} from '@mui/material/styles'

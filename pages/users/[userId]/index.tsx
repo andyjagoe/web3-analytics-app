@@ -2,6 +2,8 @@ import {
     Breadcrumbs,
     Typography,
     Grid,
+    Avatar,
+    Container
 } from '@mui/material'
 import Link from '../../../src/Link'
 import {useTheme} from '@mui/material/styles'
@@ -37,9 +39,30 @@ import useUser from "../../../hooks/useUser.jsx"
       </Grid>
     </Grid>
 
-    <Typography variant="subtitle1">
-      User page
-    </Typography>
+    <Grid 
+        container 
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ marginTop: theme.spacing(8), marginBottom: theme.spacing(4)}}
+      >
+        <Grid item xs={12}>
+          <Avatar 
+            sx={{
+              margin: theme.spacing(1),
+              height: theme.spacing(10),
+              width: theme.spacing(10)
+            }}
+            src={myUser?.Item?.image? myUser.Item.image:''}
+          >
+          </Avatar>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography component="h1" variant="h5">
+            {myUser?.Item?.name? myUser.Item.name:userId}
+          </Typography>
+        </Grid>
+      </Grid>
 
     </div>
   )

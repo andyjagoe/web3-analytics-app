@@ -18,7 +18,7 @@ const MyFavorites = () => {
                     <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
                 ))}
 
-                {!isLoading && isError &&
+                {!isLoading && myFavorites?.length === 0 &&
                     <Typography variant="subtitle1">
                         You haven&apos;t starred any apps yet.
                     </Typography>              

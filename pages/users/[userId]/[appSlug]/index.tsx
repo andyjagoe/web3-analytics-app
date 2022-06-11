@@ -224,7 +224,7 @@ const analytics = Analytics({
   plugins: [
     web3Analytics({
       appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
-      nodeUrl: 'YOUR_ALCHEMY_OR_INFURA_RINKEBY_URL'
+      jsonRpcUrl: "https://eth-rinkeby.alchemyapi.io/v2/your_key_here"
     })
   ]
 })`}

@@ -31,6 +31,8 @@ import bash from 'react-syntax-highlighter/dist/cjs/languages/hljs/bash'
 import agate from 'react-syntax-highlighter/dist/cjs/styles/hljs/agate'
 import useApp from "../../../../hooks/useApp.jsx"
 import StarButton from "../../../../components/StarButton.jsx"
+import styles from '../../../../styles/AppPage.module.css' assert { type: 'css' }
+
 
 SyntaxHighlighter.registerLanguage('javascript', js)
 SyntaxHighlighter.registerLanguage('bash', bash)
@@ -206,19 +208,34 @@ const AppPage: NextPage = () => {
       <DialogTitle id="form-dialog-instructions">Install and Use Instructions</DialogTitle>
       <DialogContent>
         <>
-        <Typography variant="body1">
-          First, install using your preferred package manager:
-        </Typography>
         <SyntaxHighlighter language="bash" style={agate}>
-          {`npm install web3analytics\n# or\nyarn add web3analytics`}
+          {`npm install analytics\nnpm install analytics-plugin-web3analytics`}
         </SyntaxHighlighter>
         <Typography variant="body1">
-          Next, import and instantiate Web3 Analytics using your appId:
+          Usage
         </Typography>
         <SyntaxHighlighter language="javascript" style={agate}>
-          {`import Web3Analytics from 'web3analytics';\n
-Web3Analytics({appId: '${myOnChainApp? myOnChainApp.appAddress:'Your App Address'}'});`}
+          {`import Analytics from 'analytics'
+import web3Analytics from 'analytics-plugin-web3analytics'
+
+/* Initialize analytics & load plugins */
+const analytics = Analytics({
+  app: 'awesome-app',
+  plugins: [
+    web3Analytics({
+      appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
+      nodeUrl: 'YOUR_ALCHEMY_OR_INFURA_RINKEBY_URL'
+    })
+  ]
+})`}
         </SyntaxHighlighter>
+        <Typography variant="body1">
+            See also this&nbsp;      
+            <a href="https://github.com/andyjagoe/web3-analytics-demo" className={styles.instructions}
+            rel="noreferrer noopener" target="_blank" >example app</a> and front end&nbsp;
+            <a href="https://getanalytics.io/" target="_blank" className={styles.instructions}
+            rel="noreferrer noopener">instrumentation documentation</a>.
+        </Typography>
         </>        
       </DialogContent>
       <DialogActions>

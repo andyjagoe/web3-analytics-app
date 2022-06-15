@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react"
 import { ethers } from "ethers"
 import useSWR from 'swr'
 import Web3Analytics from "../schema/Web3Analytics.json"
@@ -6,7 +5,6 @@ import Web3Analytics from "../schema/Web3Analytics.json"
 
 
 export default function useOnChainAppData(appAddress) {
-    const { data: session } = useSession()
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_NODE_URL);
 
 
@@ -28,7 +26,7 @@ export default function useOnChainAppData(appAddress) {
     }  
 
     const { data: data, error: myError } = useSWR(
-        () => session ? ['/api/appData', appAddress] : null, fetcher)
+        ['/api/appData', appAddress], fetcher)
     
     return {
       myAppData: data,

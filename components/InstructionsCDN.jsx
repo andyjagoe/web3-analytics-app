@@ -34,7 +34,7 @@ window.addEventListener('load', function() {
         plugins: [
             // attach web3analytics plugin
             web3analytics.default({
-                appId: '{myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
+                appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
                 jsonRpcUrl: 'https://rinkeby.infura.io/v3/your_api_key'
             })
         ]

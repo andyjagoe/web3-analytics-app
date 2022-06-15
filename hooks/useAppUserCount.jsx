@@ -8,25 +8,16 @@ export default function useAppUserCount(userId, appSlug) {
     const provider = new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_NODE_URL);
     const {myOnChainApp} = useOnChainApp(userId, appSlug)
 
-    const toInteger = (num) => {
-        try {
-            return parseInt(ethers.utils.formatEther(num))
-        } catch (error) {
-            console.log(error)
-        }
-        return 0
-    }
-
-    const fetcher = async (...args) => {    
+    const fetcher = async (...args) => { 
         const contract = new ethers.Contract(
             process.env.NEXT_PUBLIC_WEB3ANALYTICS,
             Web3Analytics,
             provider
         )
-                
+                         
         return contract.getUserCount(myOnChainApp.appAddress)
         .then(async result => {
-            return toInteger(result)
+            return ethers.utils.formatUnits(result, 0)
         })
         .catch(err => {
             console.log(err)

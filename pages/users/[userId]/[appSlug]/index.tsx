@@ -102,7 +102,7 @@ const AppPage: NextPage = () => {
               Registered users
             </Typography>              
             <Typography component="h1" variant="h3">
-              {myUserCount? '1':'0'}
+              {myUserCount? myUserCount:''}
             </Typography>
             </>
           </Grid>

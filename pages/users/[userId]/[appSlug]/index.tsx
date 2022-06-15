@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react'
 import {
   Breadcrumbs,
   Typography,
@@ -9,10 +9,6 @@ import {
   IconButton,
   Snackbar,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions
 } from '@mui/material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
@@ -25,17 +21,10 @@ import useUser from "../../../../hooks/useUser.jsx"
 import useOnChainApp from "../../../../hooks/useOnChainApp.jsx"
 import copy from 'copy-to-clipboard';
 import { useSession } from "next-auth/react"
-import { Light as SyntaxHighlighter } from 'react-syntax-highlighter'
-import js from 'react-syntax-highlighter/dist/cjs/languages/hljs/javascript'
-import bash from 'react-syntax-highlighter/dist/cjs/languages/hljs/bash'
-import agate from 'react-syntax-highlighter/dist/cjs/styles/hljs/agate'
 import useApp from "../../../../hooks/useApp.jsx"
 import StarButton from "../../../../components/StarButton.jsx"
-import styles from '../../../../styles/AppPage.module.css' assert { type: 'css' }
+import InstructionsDialog from "../../../../components/InstructionsDialog.jsx"
 
-
-SyntaxHighlighter.registerLanguage('javascript', js)
-SyntaxHighlighter.registerLanguage('bash', bash)
 
 
 const AppPage: NextPage = () => {
@@ -46,14 +35,13 @@ const AppPage: NextPage = () => {
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
   const {myItem} = useApp(userId, appSlug)
   const { data: session } = useSession()
+  const instructionsRef = useRef();
 
   // Handle instructions dialog
-  const [open, setOpen] = useState(false);
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
+  const handleOpenClick = () => {
+    if (instructionsRef.current) {
+      (instructionsRef.current as any).handleOpenClick()
+    }
   };
 
   // Handle copying and snackbar messages
@@ -173,7 +161,7 @@ const AppPage: NextPage = () => {
                 variant="contained"
                 color="primary"
                 fullWidth
-                onClick={() => {handleClickOpen()}}
+                onClick={() => {handleOpenClick()}}
                 sx={{ marginTop: theme.spacing(2)}}
               >
                 Install Instructions
@@ -189,6 +177,8 @@ const AppPage: NextPage = () => {
       </Grid>
     </Grid>
 
+    <InstructionsDialog userId={userId} appSlug={appSlug} ref={instructionsRef} />
+
     <Snackbar
       anchorOrigin= {{ vertical: 'top', horizontal: 'center' }}
       key={snackbarKey}
@@ -197,53 +187,6 @@ const AppPage: NextPage = () => {
       onClose={handleSnackbarClose}
       message={snackbarMessage}
     />
-
-    <Dialog 
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="form-dialog-instructions"
-      fullWidth
-      maxWidth="md"
-    >
-      <DialogTitle id="form-dialog-instructions">Install and Use Instructions</DialogTitle>
-      <DialogContent>
-        <>
-        <SyntaxHighlighter language="bash" style={agate}>
-          {`npm install analytics\nnpm install analytics-plugin-web3analytics`}
-        </SyntaxHighlighter>
-        <Typography variant="body1">
-          Usage
-        </Typography>
-        <SyntaxHighlighter language="javascript" style={agate}>
-          {`import Analytics from 'analytics'
-import web3Analytics from 'analytics-plugin-web3analytics'
-
-/* Initialize analytics & load plugins */
-const analytics = Analytics({
-  app: 'awesome-app',
-  plugins: [
-    web3Analytics({
-      appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
-      jsonRpcUrl: 'https://eth-rinkeby.alchemyapi.io/v2/your_key_here'
-    })
-  ]
-})`}
-        </SyntaxHighlighter>
-        <Typography variant="body1">
-            See also this&nbsp;      
-            <a href="https://github.com/andyjagoe/web3-analytics-demo" className={styles.instructions}
-            rel="noreferrer noopener" target="_blank" >example app</a> and front end&nbsp;
-            <a href="https://getanalytics.io/" target="_blank" className={styles.instructions}
-            rel="noreferrer noopener">instrumentation documentation</a>.
-        </Typography>
-        </>        
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-      </DialogActions>
-  </Dialog>
 
   </div>
   )

@@ -35,7 +35,7 @@ const AppPage: NextPage = () => {
   const {myUser} = useUser(userId)
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
   const {myItem} = useApp(userId, appSlug)
-  const {myUserCount} = useAppUserCount(appSlug)
+  const {myUserCount} = useAppUserCount(userId, appSlug)
   const { data: session } = useSession()
   const instructionsRef = useRef();
 
@@ -102,7 +102,7 @@ const AppPage: NextPage = () => {
               Registered users
             </Typography>              
             <Typography component="h1" variant="h3">
-              {myUserCount? myUserCount:'0'}
+              {myUserCount? '1':'0'}
             </Typography>
             </>
           </Grid>

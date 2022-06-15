@@ -22,6 +22,7 @@ import useOnChainApp from "../../../../hooks/useOnChainApp.jsx"
 import copy from 'copy-to-clipboard';
 import { useSession } from "next-auth/react"
 import useApp from "../../../../hooks/useApp.jsx"
+import useAppUserCount from "../../../../hooks/useAppUserCount.jsx"
 import StarButton from "../../../../components/StarButton.jsx"
 import InstructionsDialog from "../../../../components/InstructionsDialog.jsx"
 
@@ -34,6 +35,7 @@ const AppPage: NextPage = () => {
   const {myUser} = useUser(userId)
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
   const {myItem} = useApp(userId, appSlug)
+  const {myUserCount} = useAppUserCount(appSlug)
   const { data: session } = useSession()
   const instructionsRef = useRef();
 
@@ -100,7 +102,7 @@ const AppPage: NextPage = () => {
               Registered users
             </Typography>              
             <Typography component="h1" variant="h3">
-              0
+              {myUserCount? myUserCount:'0'}
             </Typography>
             </>
           </Grid>

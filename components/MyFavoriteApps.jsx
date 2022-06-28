@@ -6,7 +6,7 @@ import useMyFavoriteApps from "../hooks/useMyFavoriteApps.jsx"
 import ItemCell from "./ItemCell.jsx"
 
 
-const MyFavoritesApps = () => {
+const MyFavoriteApps = () => {
     const {myFavoriteApps, isLoading, isError} = useMyFavoriteApps()
     
     return (
@@ -29,4 +29,4 @@ const MyFavoritesApps = () => {
     )
 }
 
-export default MyFavoritesApps;  
+export default MyFavoriteApps;  

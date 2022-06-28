@@ -14,6 +14,9 @@ import MyApps from "./MyApps.jsx"
 import PopularQueries from "./PopularQueries.jsx"
 import MyQueries from "./MyQueries.jsx"
 import MyFavoriteQueries from "./MyFavoriteQueries.jsx"
+import PopularDashboards from "./PopularDashboards.jsx"
+import MyFavoriteDashboards from "./MyFavoriteDashboards.jsx"
+import MyDashboards from "./MyDashboards.jsx"
 import TabPanel from "./TabPanel.jsx"
 
 
@@ -78,6 +81,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                     return <PopularApps />
                                 case 'QUERIES':
                                     return <PopularQueries />                                          
+                                case 'DASHBOARDS':
+                                    return <PopularDashboards />                                          
                                 default:
                                     return <>Popular: {tabType}</>
                                 }
@@ -90,6 +95,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                     return <MyFavoriteApps />                                            
                                 case 'QUERIES':
                                     return <MyFavoriteQueries />                                          
+                                case 'DASHBOARDS':
+                                    return <MyFavoriteDashboards />                                          
                                 default:
                                     return <>Favorites: {tabType}</>
                                 }
@@ -102,6 +109,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                     return <MyApps />                                            
                                 case 'QUERIES':
                                     return <MyQueries />                                          
+                                case 'DASHBOARDS':
+                                    return <MyDashboards />                                          
                                 default:
                                     return <>Created by you: {tabType}</>
                                 }
@@ -118,6 +127,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                     return <PopularApps />                                            
                                 case 'QUERIES':
                                     return <PopularQueries />                                          
+                                case 'DASHBOARDS':
+                                    return <PopularDashboards />                                          
                                 default:
                                     return <>Popular: {tabType}</>
                                 }

@@ -2,13 +2,15 @@ import useSWR from 'swr'
 import axios from 'axios'
 
 
-export default function usePopularApps() {
+export default function useItem(userId, type, appSlug) {
+
     const fetcher = url => axios.get(url).then(res => res.data)
 
-    const { data: data, error: myError } = useSWR('/api/app/popular', fetcher)
+    const { data: data, error: myError } = useSWR(
+        `/api/users/${userId}/${type}/${appSlug}`, fetcher)
     
     return {
-      popularApps: data,
+      myItem: data,
       isLoading: !myError && !data,
       isError: myError
     }

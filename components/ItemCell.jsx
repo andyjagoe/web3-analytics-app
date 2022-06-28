@@ -15,6 +15,7 @@ const ItemCell = ({item}) => {
     const theme = useTheme()
     const {myAppData} = useOnChainAppData(item.address)
     const {myUser} = useUser(item.pk.substring(5))
+    const formattedType = item.type.toLowerCase()
 
     return (
     <>
@@ -51,9 +52,9 @@ const ItemCell = ({item}) => {
                             >
                                 <Link                                                     
                                     color="inherit" 
-                                    href={`/users/${item.pk.substring(5)}/${item.slug}`}
+                                    href={`/users/${item.pk.substring(5)}/${formattedType}/${item.slug}`}
                                 >
-                                    {myAppData? myAppData.appName:item.slug}
+                                    {item.name? item.name:myAppData? myAppData.appName:item.slug}
                                 </Link>
                                 <div>
                                     Created by&nbsp; 

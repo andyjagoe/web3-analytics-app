@@ -8,9 +8,12 @@ import {
 import {useTheme} from '@mui/material/styles'
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router'
-import MyApps from "./MyApps.jsx"
 import PopularApps from "./PopularApps.jsx"
-import MyFavorites from "./MyFavorites.jsx"
+import MyFavoriteApps from "./MyFavoriteApps.jsx"
+import MyApps from "./MyApps.jsx"
+import PopularQueries from "./PopularQueries.jsx"
+import MyQueries from "./MyQueries.jsx"
+import MyFavoriteQueries from "./MyFavoriteQueries.jsx"
 import TabPanel from "./TabPanel.jsx"
 
 
@@ -72,7 +75,9 @@ const MyTabs = ({tabType, tabSelected}) => {
                             {(() => { 
                                 switch(tabType) {
                                 case 'APPS':
-                                    return <PopularApps />                                            
+                                    return <PopularApps />
+                                case 'QUERIES':
+                                    return <PopularQueries />                                          
                                 default:
                                     return <>Popular: {tabType}</>
                                 }
@@ -82,7 +87,9 @@ const MyTabs = ({tabType, tabSelected}) => {
                             {(() => { 
                                 switch(tabType) {
                                 case 'APPS':
-                                    return <MyFavorites />                                            
+                                    return <MyFavoriteApps />                                            
+                                case 'QUERIES':
+                                    return <MyFavoriteQueries />                                          
                                 default:
                                     return <>Favorites: {tabType}</>
                                 }
@@ -93,6 +100,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                 switch(tabType) {
                                 case 'APPS':
                                     return <MyApps />                                            
+                                case 'QUERIES':
+                                    return <MyQueries />                                          
                                 default:
                                     return <>Created by you: {tabType}</>
                                 }
@@ -107,6 +116,8 @@ const MyTabs = ({tabType, tabSelected}) => {
                                 switch(tabType) {
                                 case 'APPS':
                                     return <PopularApps />                                            
+                                case 'QUERIES':
+                                    return <PopularQueries />                                          
                                 default:
                                     return <>Popular: {tabType}</>
                                 }

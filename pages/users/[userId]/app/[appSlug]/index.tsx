@@ -12,19 +12,19 @@ import {
 } from '@mui/material'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
-import Link from '../../../../src/Link'
+import Link from '../../../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import useUser from "../../../../hooks/useUser.jsx"
-import useOnChainApp from "../../../../hooks/useOnChainApp.jsx"
+import useUser from "../../../../../hooks/useUser.jsx"
+import useOnChainApp from "../../../../../hooks/useOnChainApp.jsx"
 import copy from 'copy-to-clipboard';
 import { useSession } from "next-auth/react"
-import useApp from "../../../../hooks/useApp.jsx"
-import useAppUserCount from "../../../../hooks/useAppUserCount.jsx"
-import StarButton from "../../../../components/StarButton.jsx"
-import InstructionsDialog from "../../../../components/InstructionsDialog.jsx"
+import useItem from "../../../../../hooks/useItem.jsx"
+import useAppUserCount from "../../../../../hooks/useAppUserCount.jsx"
+import StarButton from "../../../../../components/StarButton.jsx"
+import InstructionsDialog from "../../../../../components/InstructionsDialog.jsx"
 
 
 
@@ -34,7 +34,7 @@ const AppPage: NextPage = () => {
   const { userId, appSlug } = router.query
   const {myUser} = useUser(userId)
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
-  const {myItem} = useApp(userId, appSlug)
+  const {myItem} = useItem(userId, 'app', appSlug)
   const {myUserCount} = useAppUserCount(userId, appSlug)
   const { data: session } = useSession()
   const instructionsRef = useRef();
@@ -80,7 +80,6 @@ const AppPage: NextPage = () => {
                 {myUser?.Item?.name? myUser.Item.name:userId}
               </Link>
               <Typography color="textPrimary">{myOnChainApp? myOnChainApp.appName:appSlug}</Typography>
-                {myOnChainApp? myOnChainApp.appName:appSlug}
             </Breadcrumbs>
           </Grid>
         </Grid>

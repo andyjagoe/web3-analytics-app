@@ -6,6 +6,8 @@ const tableName = process.env.WEB3ANALYTICS_DYNAMODB
 
 export default async function handler(req, res) {    
     const session = await getSession({ req })
+    const { type } = req.query
+    const formattedType = type.toUpperCase()
 
     if (session) {
 
@@ -15,7 +17,7 @@ export default async function handler(req, res) {
                 IndexName: 'GSI2',
                 KeyConditionExpression: "GSI2PK = :GSI2PKVal",
                 ExpressionAttributeValues: {
-                    ":GSI2PKVal" : `USER#${session.user.id}#APP`,
+                    ":GSI2PKVal" : `USER#${session.user.id}#${formattedType}`,
                 },
                 ScanIndexForward: false
             })

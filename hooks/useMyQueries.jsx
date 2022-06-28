@@ -4,16 +4,16 @@ import axios from 'axios'
 
 
 
-export default function useMyApps() {
+export default function useMyQueries() {
     const { data: session } = useSession()
 
     const fetcher = url => axios.get(url).then(res => res.data)
 
     const { data: data, error: myError } = useSWR(
-        () => session ? ['/api/app/mine', session.user.id] : null, fetcher)
+        () => session ? ['/api/query/mine', session.user.id] : null, fetcher)
     
     return {
-      myApps: data,
+      myQueries: data,
       isLoading: !myError && !data,
       isError: myError
     }

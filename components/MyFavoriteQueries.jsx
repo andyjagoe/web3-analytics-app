@@ -2,25 +2,25 @@ import {
     Grid,
     Typography,
 } from '@mui/material'  
-import useMyFavorites from "../hooks/useMyFavorites.jsx"
+import useMyFavoriteQueries from "../hooks/useMyFavoriteQueries.jsx"
 import ItemCell from "./ItemCell.jsx"
 
 
-const MyFavorites = () => {
-    const {myFavorites, isLoading, isError} = useMyFavorites()
+const MyFavoritesQueries = () => {
+    const {myFavoriteQueries, isLoading, isError} = useMyFavoriteQueries()
     
     return (
         <Grid container spacing={0} direction="column">          
             <Grid item xs={12}>
 
-                {!isLoading && !isError && myFavorites?.length > 0 && myFavorites.map((item) => 
+                {!isLoading && !isError && myFavoriteQueries?.length > 0 && myFavoriteQueries.map((item) => 
                 (
                     <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
                 ))}
-
-                {!isLoading && !isError && myFavorites?.Responses?.length === 0 &&
+                
+                {!isLoading && !isError && myFavoriteQueries?.length === 0 &&
                     <Typography variant="subtitle1">
-                        You haven&apos;t starred any apps yet.
+                        You haven&apos;t starred any queries yet.
                     </Typography>              
                 }
 
@@ -29,4 +29,4 @@ const MyFavorites = () => {
     )
 }
 
-export default MyFavorites;  
+export default MyFavoritesQueries;  

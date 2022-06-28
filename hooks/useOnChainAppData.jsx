@@ -26,7 +26,7 @@ export default function useOnChainAppData(appAddress) {
     }  
 
     const { data: data, error: myError } = useSWR(
-        ['/api/appData', appAddress], fetcher)
+        () => appAddress ? ['/api/appData', appAddress] : null, fetcher)
     
     return {
       myAppData: data,

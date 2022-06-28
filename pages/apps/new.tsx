@@ -127,7 +127,7 @@ const NewApp: NextPage = () => {
             await tx.wait()
     
             const response = await registerAppInDb(account?.address as string, appName, 0)
-            if (response) router.push(`/users/${session?.user?.id}/${response.data.slug}`)
+            if (response) router.push(`/users/${session?.user?.id}/app/${response.data.slug}`)
             
             setRegisterAppLoading(false)
             setLoading(false)    

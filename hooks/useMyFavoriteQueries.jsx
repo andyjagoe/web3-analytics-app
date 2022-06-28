@@ -4,11 +4,11 @@ import axios from 'axios'
 
 
 
-export default function useMyFavorites() {
+export default function useMyFavoriteQueries() {
     const { data: session } = useSession()
 
     const fetcher = url => axios.get(url).then(res => {
-      if (res.data.Responses.length === 0) return res.data    
+      if (res.data.Responses.length === 0) return []    
 
       const keyName = Object.keys(res.data.Responses)[0]
       const sorted = res.data?.Responses?.[keyName].sort((a, b) => {
@@ -18,10 +18,10 @@ export default function useMyFavorites() {
     })
 
     const { data: data, error: myError } = useSWR(
-        () => session ? ['/api/apps/favorites', session.user.id] : null, fetcher)
+        () => session ? ['/api/query/favorites', session.user.id] : null, fetcher)
     
     return {
-      myFavorites: data,
+      myFavoriteQueries: data,
       isLoading: !myError && !data,
       isError: myError
     }

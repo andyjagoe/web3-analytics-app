@@ -13,20 +13,21 @@ const StarButton = ({item}) => {
     const { mutate } = useSWRConfig()
     const { data: session } = useSession()
     const itemCellType = item.sk.split("#")[0] || null
+    const type = item.type.toLowerCase()
     const matchString = `STAR#${itemCellType}#${item.pk.substring(5)}#${item.slug}`
     const {myStars} = useStars(itemCellType)
 
     const starItem = async () => {
         const response = await axios({
             method: 'put',
-            url: `/api/users/${item.pk.substring(5)}/${item.slug}/star`
+            url: `/api/users/${item.pk.substring(5)}/${type}/${item.slug}/star`
         })
         if (response.status === 201) {
             await mutate(['/api/stars', session.user.id, itemCellType])
-            mutate(`/api/users/${item.pk.substring(5)}/${item.slug}`) 
-            mutate('/api/apps/popular')          
-            mutate(['/api/apps/mine', session.user.id])
-            mutate(['/api/apps/favorites', session.user.id]) 
+            mutate(`/api/users/${item.pk.substring(5)}/${type}/${item.slug}`) 
+            mutate(`/api/${type}/popular`)          
+            mutate([`/api/${type}/mine`, session.user.id])
+            mutate([`/api/${type}/favorites`, session.user.id]) 
             return response
         }
         
@@ -36,14 +37,14 @@ const StarButton = ({item}) => {
     const unstarItem = async () => {
         const response = await axios({
             method: 'delete',
-            url: `/api/users/${item.pk.substring(5)}/${item.slug}/star`
+            url: `/api/users/${item.pk.substring(5)}/${type}/${item.slug}/star`
         })
         if (response.status === 204) {
             await mutate(['/api/stars', session.user.id, itemCellType])
-            mutate(`/api/users/${item.pk.substring(5)}/${item.slug}`) 
-            mutate('/api/apps/popular')
-            mutate(['/api/apps/mine', session.user.id])    
-            mutate(['/api/apps/favorites', session.user.id])
+            mutate(`/api/users/${item.pk.substring(5)}/${type}/${item.slug}`) 
+            mutate(`/api/${type}/popular`)
+            mutate([`/api/${type}/mine`, session.user.id])    
+            mutate([`/api/${type}/favorites`, session.user.id])
             return response
         }
 

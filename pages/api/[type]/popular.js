@@ -4,6 +4,8 @@ const tableName = process.env.WEB3ANALYTICS_DYNAMODB
 
 
 export default async function handler(req, res) {    
+    const { type } = req.query
+    const formattedType = type.toUpperCase()
 
     if (req.method === 'GET') {
         const data = await dynamoDb.query({
@@ -11,7 +13,7 @@ export default async function handler(req, res) {
             IndexName: 'GSI1',
             KeyConditionExpression: "GSI1PK = :GSI1PKVal",
             ExpressionAttributeValues: {
-                ":GSI1PKVal" : "APP",
+                ":GSI1PKVal" : `${formattedType}`,
             },
             ScanIndexForward: false
         })

@@ -26,7 +26,7 @@ export default function useOnChainApp(userId, appSlug) {
     }
 
     const { data: data, error: myError } = useSWR(
-        [`/api/users/${userId}/${appSlug}`, 'appData'], fetcher)
+        [`/api/users/${userId}/app/${appSlug}`, 'appData'], fetcher)
     
     return {
       myOnChainApp: data,

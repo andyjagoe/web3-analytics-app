@@ -6,6 +6,8 @@ const tableName = process.env.WEB3ANALYTICS_DYNAMODB
 
 export default async function handler(req, res) {    
     const session = await getSession({ req })
+    const { type } = req.query
+    const formattedType = type.toUpperCase()
 
     if (session) {
 
@@ -17,7 +19,7 @@ export default async function handler(req, res) {
                 KeyConditionExpression: "pk = :pkVal AND begins_with(sk, :skVal)",
                 ExpressionAttributeValues: {
                     ":pkVal" : `USER#${session.user.id}`,
-                    ":skVal" : "STAR#APP#"
+                    ":skVal" : `STAR#${formattedType}#`
                 },
                 ScanIndexForward: false
             })
@@ -29,7 +31,7 @@ export default async function handler(req, res) {
                 keys.push(
                     {
                         pk: `USER#${parts[2]}`,
-                        sk: `APP#${parts[3]}`,
+                        sk: `${formattedType}#${parts[3]}`,
                     }
                 )
             }

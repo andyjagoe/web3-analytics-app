@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-athena": "^3.118.1",
     "@aws-sdk/client-dynamodb": "^3.95.0",
     "@aws-sdk/lib-dynamodb": "^3.95.0",
+    "@codemirror/lang-sql": "^6.0.0",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.9.0",
     "@emotion/server": "^11.4.0",
@@ -26,6 +28,8 @@
     "@types/react": "^18.0.9",
     "@types/react-syntax-highlighter": "^15.5.1",
     "@types/valid-url": "^1.0.3",
+    "@uiw/codemirror-theme-sublime": "^4.9.4",
+    "@uiw/react-codemirror": "^4.9.4",
     "axios": "^0.27.2",
     "copy-to-clipboard": "^3.3.1",
     "ethers": "^5.6.6",

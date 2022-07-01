@@ -14,18 +14,35 @@ import { useSession } from "next-auth/react"
 import useUser from "../../../../../hooks/useUser.jsx"
 import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
-import QueryResults from "../../../../../components/QueryResults.jsx"
 import axios from 'axios'
 import CodeMirror from '@uiw/react-codemirror'
 import { sql } from '@codemirror/lang-sql'
 import { sublime } from '@uiw/codemirror-theme-sublime'
+import { usePapaParse } from 'react-papaparse'
+import { 
+  DataGrid, 
+  GridToolbarContainer,
+  GridToolbarFilterButton,
+  GridToolbarExport
+} from '@mui/x-data-grid'
 
+
+const CustomToolbar = () => {
+  return (
+    <GridToolbarContainer>
+      <GridToolbarFilterButton />
+      <GridToolbarExport />
+    </GridToolbarContainer>
+  )
+}
 
 
 const QueryPage: NextPage = () => {
-  const [sqlCode, setSqlCode] = useState("select * from events;")
-  const [headings, setHeadings] = useState([])
-  const [rows, setRows] = useState([])
+  const [sqlCode, setSqlCode] = useState(
+    "-- Type your SQL query here. Here's one to get you started...\nselect * from events;"
+  )
+  const [dataGridColumns, setDataGridColumns] = useState<string[]>([])
+  const [dataGridRows, setDataGridRows] = useState<string[]>([])
   const [disable, setDisabled] = useState(false)
   const [loading, setLoading] = useState(false)
   const theme = useTheme()
@@ -34,21 +51,47 @@ const QueryPage: NextPage = () => {
   const { userId, slug } = router.query
   const {myUser} = useUser(userId)
   const {myItem} = useItem(userId, 'query', slug)
+  const { readRemoteFile } = usePapaParse();
 
   const onChange = useCallback((value:any, viewUpdate:any) => {
     setSqlCode(value)
   }, []);
 
 
+  const handleReadRemoteFile = async (bigFileURL:string) => {
+    let rowsRead = 0
+    readRemoteFile(bigFileURL, {
+      worker: true,
+      step: (row:any) => {
+        if (rowsRead === 0 ) {
+          let fields = []
+          for (const field of row.meta.fields) {
+            fields.push({field: field, headerName: field, width: 300})
+          }
+          fields.push({field: '_datagrid_id', headerName: '_datagrid_id', width: 100})
+          setDataGridColumns(fields as any)
+        }
+        rowsRead++
+        row.data._datagrid_id = rowsRead
+        setDataGridRows(dataGridRows => [...dataGridRows, row.data])
+      },
+      complete: (results:any) => {
+        console.log('Query result successfully loaded')
+      },
+      header: true,
+      skipEmptyLines: true
+    } as any);
+  };
+
   const startQuery = async () => {
     setLoading(true)
-    setHeadings([])
-    setRows([])
+    setDataGridColumns([])
+    setDataGridRows([])
 
     try {
       const response = await axios({
         method: 'put',
-        url: '/api/run',
+        url: `/api/users/${userId}/query/${slug}/query`,
         data: {
             sql: sqlCode
         }
@@ -71,15 +114,11 @@ const QueryPage: NextPage = () => {
 
     try {
       const response = await axios({
-        method: 'post',
-        url: '/api/run',
-        data: {
-          queryExecutionId: queryExecutionId
-        }
+        method: 'get',
+        url: `/api/users/${userId}/query/${slug}/query/${queryExecutionId}`
       })
       if (response.status === 200) {
-        setHeadings(response.data.ResultSet.ResultSetMetadata.ColumnInfo)
-        setRows(response.data.ResultSet.Rows)
+        handleReadRemoteFile(response.data.signedUrl)
       } else if (response.status === 400) {
           await getResults(queryExecutionId, ms*2)
       }
@@ -146,10 +185,24 @@ const QueryPage: NextPage = () => {
         </Grid>
       </Grid>
 
-      <Grid item xs={12}>
-        <QueryResults headings={headings} rows={rows} />
-      </Grid>
-
+      {dataGridRows.length > 0?
+        <Grid item xs={12}>
+          <div style={{ height: 300, width: '100%' }}>
+            <DataGrid 
+              rows={dataGridRows as any} 
+              columns={dataGridColumns as any} 
+              getRowId={(row) => row._datagrid_id}
+              columnVisibilityModel={{
+                _datagrid_id: false,
+              }}
+              components={{ Toolbar: CustomToolbar }}
+              checkboxSelection={true}
+            />
+          </div>
+        </Grid>
+        :
+        <></>
+      }
     </Grid>
 
   </div>

@@ -4,7 +4,7 @@ const tableName = process.env.WEB3ANALYTICS_DYNAMODB
 
 
 export default async function handler(req, res) {
-    const { userId, type, appSlug } = req.query
+    const { userId, type, slug } = req.query
     const formattedType = type.toUpperCase()
 
     if (req.method === 'GET') {
@@ -18,6 +18,20 @@ export default async function handler(req, res) {
                 '#sk': 'sk',
                 '#slug': 'slug',
                 '#type': 'type',
+                '#address': 'address',
+                '#createdAt': 'createdAt',
+                '#starCount': 'starCount'
+            }
+        } else if (formattedType === "QUERY") {
+            projectionExpression = "#pk,#sk,#slug,#name,#query,#status,#type,#address,#createdAt,#starCount"
+            expressionAttributeNames = {
+                '#pk': 'pk',
+                '#sk': 'sk',
+                '#slug': 'slug',
+                '#name': 'name',
+                '#type': 'type',
+                '#query': 'query',
+                '#status': 'status',
                 '#address': 'address',
                 '#createdAt': 'createdAt',
                 '#starCount': 'starCount'
@@ -39,12 +53,12 @@ export default async function handler(req, res) {
             TableName: tableName,
             Key: {
                 pk: `USER#${userId}`,
-                sk: `${formattedType}#${appSlug}`        
+                sk: `${formattedType}#${slug}`        
             },
             ProjectionExpression: projectionExpression,
             ExpressionAttributeNames: expressionAttributeNames
         })
-                
+                        
         res.status(200).json(data)
         }        
           

@@ -21,6 +21,7 @@ export default async function handler(req, res) {
                 name: req.body.name,
                 type: "QUERY",
                 slug: mySlug,
+                query: "-- Type your SQL query here. Here's one to get you started...\nselect * from events;",
                 starCount: 0,
                 createdAt: myDate,
                 GSI1PK: "QUERY",

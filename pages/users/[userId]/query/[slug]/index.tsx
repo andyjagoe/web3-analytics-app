@@ -1,8 +1,11 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
   Breadcrumbs,
   Typography,
   Grid,
+  Alert,
+  Stack,
+  Box
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Link from '../../../../../src/Link'
@@ -14,6 +17,7 @@ import { useSession } from "next-auth/react"
 import useUser from "../../../../../hooks/useUser.jsx"
 import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
+import LoadingPage from "../../../../../components/LoadingPage"
 import axios from 'axios'
 import CodeMirror from '@uiw/react-codemirror'
 import { sql } from '@codemirror/lang-sql'
@@ -25,6 +29,9 @@ import {
   GridToolbarFilterButton,
   GridToolbarExport
 } from '@mui/x-data-grid'
+import { useSWRConfig } from 'swr'
+import { DateTime, Interval } from "luxon"
+import humanizeDuration from 'humanize-duration'
 
 
 const CustomToolbar = () => {
@@ -38,30 +45,56 @@ const CustomToolbar = () => {
 
 
 const QueryPage: NextPage = () => {
-  const [sqlCode, setSqlCode] = useState(
-    "-- Type your SQL query here. Here's one to get you started...\nselect * from events;"
-  )
+  const router = useRouter()
+  const { userId, slug } = router.query
+  const {myUser} = useUser(userId)
+  const {myItem} = useItem(userId, 'query', slug)
+  const [sqlCode, setSqlCode] = useState("")
+  const [queryError, setQueryError] = useState("")
   const [dataGridColumns, setDataGridColumns] = useState<string[]>([])
   const [dataGridRows, setDataGridRows] = useState<string[]>([])
   const [disable, setDisabled] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [loadingCSV, setLoadingCSV] = useState(false)
   const theme = useTheme()
-  const router = useRouter()
   const { data: session } = useSession()
-  const { userId, slug } = router.query
-  const {myUser} = useUser(userId)
-  const {myItem} = useItem(userId, 'query', slug)
-  const { readRemoteFile } = usePapaParse();
+  const { readRemoteFile } = usePapaParse()
+  const { mutate } = useSWRConfig()
 
   const onChange = useCallback((value:any, viewUpdate:any) => {
     setSqlCode(value)
   }, []);
 
+  
+  useEffect(() => {
+    if (userId) getCsv()
+  }, [userId])
+
+
+  const getCsv = async () => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `/api/users/${userId}/query/${slug}/csv`        
+      })
+      if (response.status === 200) {
+        await handleReadRemoteFile(response.data.signedUrl)
+      }
+    } catch (error) {
+        console.log(error)
+        setLoading(false)
+    }
+  }
+
 
   const handleReadRemoteFile = async (bigFileURL:string) => {
     let rowsRead = 0
+    setLoadingCSV(true)
     readRemoteFile(bigFileURL, {
       worker: true,
+      header: true,
+      skipEmptyLines: true,
+      preview: 500,
       step: (row:any) => {
         if (rowsRead === 0 ) {
           let fields = []
@@ -70,20 +103,24 @@ const QueryPage: NextPage = () => {
           }
           fields.push({field: '_datagrid_id', headerName: '_datagrid_id', width: 100})
           setDataGridColumns(fields as any)
+          setLoadingCSV(false)
         }
         rowsRead++
         row.data._datagrid_id = rowsRead
         setDataGridRows(dataGridRows => [...dataGridRows, row.data])
       },
       complete: (results:any) => {
-        console.log('Query result successfully loaded')
+        setLoadingCSV(false)
       },
-      header: true,
-      skipEmptyLines: true
+      error: (error:any) => {
+        setLoadingCSV(false)
+      }
     } as any);
-  };
+  }
+
 
   const startQuery = async () => {
+    setQueryError("")
     setLoading(true)
     setDataGridColumns([])
     setDataGridRows([])
@@ -101,13 +138,16 @@ const QueryPage: NextPage = () => {
       }
     } catch (error) {
         console.log(error)
+        setQueryError((error as any)?.response?.data)
         setLoading(false)
     }
   }
 
+
   const delay = (ms: number) => {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
+
 
   const getResults = async (queryExecutionId:string, ms:number) => {
     await delay(ms);
@@ -118,11 +158,21 @@ const QueryPage: NextPage = () => {
         url: `/api/users/${userId}/query/${slug}/query/${queryExecutionId}`
       })
       if (response.status === 200) {
-        handleReadRemoteFile(response.data.signedUrl)
-      } else if (response.status === 400) {
-          await getResults(queryExecutionId, ms*2)
+          mutate(`/api/users/${userId}/query/${slug}`)
+          switch(response?.data?.QueryExecution?.Status?.State) {
+            case 'SUCCEEDED':
+              getCsv()
+              break
+            case 'FAILED':
+              setQueryError(response?.data?.QueryExecution?.Status?.StateChangeReason)          
+              break
+            case 'CANCELLED':
+              setQueryError(response?.data?.QueryExecution?.Status?.StateChangeReason)          
+              break
+            default:
+              await getResults(queryExecutionId, ms*2)            
+          }
       }
-
     } catch (error) {
         console.log(error)
         setLoading(false)
@@ -163,7 +213,7 @@ const QueryPage: NextPage = () => {
       <Grid item xs={12}>
         <CodeMirror
           readOnly={session?.user?.id === userId ? false:true}
-          value={sqlCode}
+          value={myItem? myItem?.Item?.query:''}
           height="200px"
           extensions={[sql()]}
           theme={sublime}
@@ -173,7 +223,7 @@ const QueryPage: NextPage = () => {
       <Grid item xs={12}>
       </Grid>
       <Grid item xs={12}>
-        <Grid container direction="row-reverse">
+        <Grid container direction="row-reverse" sx={{ alignItems: 'center'}}>
           <LoadingButton
                   disabled={disable}
                   variant="contained"
@@ -182,11 +232,71 @@ const QueryPage: NextPage = () => {
           >
               Run
           </LoadingButton>
+          {myItem?.Item?.status?.CompletionDateTime?
+            <Stack justifyContent="flex-end" sx={{ marginRight: theme.spacing(2)}}>
+              <Box display="flex" justifyContent="flex-end">
+                <Typography 
+                  variant="body2"          
+                  color="textPrimary"                   
+                >
+                  Last run&nbsp;
+                    <b>
+                    {DateTime.fromISO(myItem?.Item?.status?.CompletionDateTime)
+                      .toRelative()}
+                    </b>
+                </Typography>
+              </Box>
+              <Box display="flex" justifyContent="flex-end">
+                <Typography 
+                  variant="body2"          
+                  color="textPrimary" 
+                >
+                  Last run took&nbsp;
+                    <b>
+                    {
+                      humanizeDuration(               
+                        Interval.fromDateTimes(
+                          DateTime.fromISO(myItem?.Item?.status?.SubmissionDateTime),
+                          DateTime.fromISO(myItem?.Item?.status?.CompletionDateTime)
+                        )
+                        .toDuration()
+                        .valueOf()
+                      )
+                    }
+                    </b>
+                </Typography>
+              </Box>
+            </Stack>
+            :
+            <></>        
+          }
         </Grid>
       </Grid>
 
-      {dataGridRows.length > 0?
+
+      {queryError !== ""?
         <Grid item xs={12}>
+          <Alert severity="error">
+            {queryError}
+          </Alert>
+        </Grid>
+      :
+      <></>
+      }
+
+      {queryError === "" && myItem?.Item?.status?.State === 'FAILED'?
+        <Grid item xs={12}>
+          <Alert severity="error">
+            {myItem?.Item?.status?.StateChangeReason}
+          </Alert>
+        </Grid>
+      :
+      <></>
+      }
+
+      <Grid item xs={12}>
+        {loadingCSV? <LoadingPage />:<></>}
+        {dataGridColumns.length > 0 && myItem?.Item?.status?.State !== 'FAILED'?
           <div style={{ height: 300, width: '100%' }}>
             <DataGrid 
               rows={dataGridRows as any} 
@@ -199,10 +309,11 @@ const QueryPage: NextPage = () => {
               checkboxSelection={true}
             />
           </div>
-        </Grid>
         :
         <></>
-      }
+        }
+      </Grid>
+
     </Grid>
 
   </div>

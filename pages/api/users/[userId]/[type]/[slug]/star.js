@@ -6,7 +6,7 @@ const tableName = process.env.WEB3ANALYTICS_DYNAMODB
 
 export default async function handler(req, res) {
     const session = await getSession({ req })
-    const { userId, type, appSlug } = req.query
+    const { userId, type, slug } = req.query
     const formattedType = type.toUpperCase()
 
     if (session) {
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
             const item = {
                 pk: `USER#${session.user.id}`,
-                sk: `STAR#${formattedType}#${userId}#${appSlug}`,
+                sk: `STAR#${formattedType}#${userId}#${slug}`,
                 type: "STAR",
                 createdAt: myDate,
             };
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
                     ConditionExpression: "pk <> :pkVal AND sk <> :skVal",
                     ExpressionAttributeValues: {
                         ":pkVal" : `USER#${session.user.id}`,
-                        ":skVal": `STAR#${formattedType}#${userId}#${appSlug}`
+                        ":skVal": `STAR#${formattedType}#${userId}#${slug}`
                     }
                 })
 
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
                     TableName: tableName,
                     Key: {
                         pk: `USER#${userId}`,
-                        sk: `${formattedType}#${appSlug}`
+                        sk: `${formattedType}#${slug}`
                     },
                     UpdateExpression: "SET #starCount = #starCount + :incVal, GSI1SK = GSI1SK + :incVal",
                     ExpressionAttributeNames: { "#starCount": "starCount" },
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
                 TableName: tableName,
                 Key: {
                     pk: `USER#${session.user.id}`,
-                    sk: `STAR#${formattedType}#${userId}#${appSlug}`,
+                    sk: `STAR#${formattedType}#${userId}#${slug}`,
                 }
             });
 
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
                 TableName: tableName,
                 Key: {
                     pk: `USER#${userId}`,
-                    sk: `${formattedType}#${appSlug}`
+                    sk: `${formattedType}#${slug}`
                 },
                 UpdateExpression: "SET #starCount = #starCount - :decVal, GSI1SK = GSI1SK - :decVal",
                 ExpressionAttributeNames: { "#starCount": "starCount" },

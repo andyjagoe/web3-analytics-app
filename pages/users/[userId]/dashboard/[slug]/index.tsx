@@ -23,6 +23,7 @@ import useComponents from "../../../../../hooks/useComponents.jsx"
 import AddComponentDialog from "../../../../../components/dashboard/AddComponentDialog.jsx"
 import { useSWRConfig } from 'swr'
 import axios from 'axios'
+import { useSession } from "next-auth/react"
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
 
@@ -38,6 +39,7 @@ const DashboardPage: NextPage = () => {
   const {myItem} = useItem(userId, 'dashboard', slug)
   const {myComponents} = useComponents(userId, 'dashboard', slug)
   const addComponentRef = useRef()
+  const { data: session } = useSession()
   const { mutate } = useSWRConfig()
 
 
@@ -91,12 +93,14 @@ const DashboardPage: NextPage = () => {
           <Grid container direction="row-reverse">
             {myItem && myItem.Item && 
             <StarButton item={myItem.Item} />}            
+            {session?.user?.id === userId?
             <Button
                 onClick={() => { handleOpenClick() }}
                 sx={{ padding: '0'}}
             >
               <Add />
-            </Button>               
+            </Button>
+            :<></>}
           </Grid>
         </Grid>
       </Grid>

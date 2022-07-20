@@ -20,6 +20,7 @@ export default async function handler(req, res) {
                 sk: `DASHBOARD#${mySlug}`,
                 name: req.body.name,
                 type: "DASHBOARD",
+                layout: [],
                 slug: mySlug,
                 starCount: 0,
                 createdAt: myDate,

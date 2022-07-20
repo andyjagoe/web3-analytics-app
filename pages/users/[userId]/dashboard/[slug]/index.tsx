@@ -1,20 +1,33 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import {
   Breadcrumbs,
   Typography,
   Grid,
-  Snackbar,
+  Box,
+  Button,
 } from '@mui/material'
+import { Add } from '@mui/icons-material'
 import Link from '../../../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import useUser from "../../../../../hooks/useUser.jsx"
-import copy from 'copy-to-clipboard';
 import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
+import CsvDataGrid from "../../../../../components/dashboard/CsvDataGrid.jsx"
+import BarChart from "../../../../../components/dashboard/BarChart.jsx"
+import ComponentNavBar from "../../../../../components/dashboard/ComponentNavBar.jsx"
+import { Responsive, WidthProvider } from "react-grid-layout"
+import useComponents from "../../../../../hooks/useComponents.jsx"
+import AddComponentDialog from "../../../../../components/dashboard/AddComponentDialog.jsx"
+import { useSWRConfig } from 'swr'
+import axios from 'axios'
+import 'react-grid-layout/css/styles.css'
+import 'react-resizable/css/styles.css'
 
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 
 const DashboardPage: NextPage = () => {
@@ -23,31 +36,36 @@ const DashboardPage: NextPage = () => {
   const { userId, slug } = router.query
   const {myUser} = useUser(userId)
   const {myItem} = useItem(userId, 'dashboard', slug)
-  const instructionsRef = useRef();
+  const {myComponents} = useComponents(userId, 'dashboard', slug)
+  const addComponentRef = useRef()
+  const { mutate } = useSWRConfig()
 
-  // Handle instructions dialog
+
+  const layoutChange = async (layout: any) => {
+    try {
+      const response = await axios({
+        method: 'post',
+        url: `/api/users/${userId}/dashboard/${slug}`,
+        data: {
+          layout: layout
+        }
+      })
+      if (response.status === 201) {
+        mutate(`/api/users/${userId}/dashboard/${slug}`) 
+      }
+    } catch (error) {
+        console.log(error)
+    }
+
+  }
+
+
+  // Handle add component dialog
   const handleOpenClick = () => {
-    if (instructionsRef.current) {
-      (instructionsRef.current as any).handleOpenClick()
+    if (addComponentRef.current) {
+      (addComponentRef.current as any).handleOpenClick()
     }
-  };
-
-  // Handle copying and snackbar messages
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarKey, setSnackbarKey] = useState('');
-  const handleSnackbarClick = (text:string, message:string, key:string) => {
-    copy(text)
-    setSnackbarMessage(message);
-    setSnackbarKey(key);
-    setOpenSnackbar(true);
-  };
-  const handleSnackbarClose = (event:any, reason:string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
+  }
 
   
   return (
@@ -73,24 +91,54 @@ const DashboardPage: NextPage = () => {
           <Grid container direction="row-reverse">
             {myItem && myItem.Item && 
             <StarButton item={myItem.Item} />}            
+            <Button
+                onClick={() => { handleOpenClick() }}
+                sx={{ padding: '0'}}
+            >
+              <Add />
+            </Button>               
           </Grid>
         </Grid>
       </Grid>
 
-    <Grid container spacing={2} sx={{ marginTop: theme.spacing(2)}}>
-      <Grid item xs={12}>
-      </Grid>
-    </Grid>
+      {myItem && myComponents?
+        <ResponsiveGridLayout
+          className="layout"
+          layouts={ myItem?.Item?.layout? { lg:myItem.Item.layout } : { lg: []} }
+          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+          cols={{ lg: 4, md: 3, sm: 2, xs: 1, xxs: 1 }}
+          rowHeight={100}
+          onResizeStop={layoutChange}
+          onDragStop={layoutChange}
+        >
+          
+          {myComponents?.Items.length > 0? 
+            myComponents?.Items?.map((component:any) => 
+            (
+              <Box key={component.uid} sx={{ border: '1px solid black' }}>
+                <>
+                  <ComponentNavBar item={component} userId={userId} slug={slug} />
+                  {component?.format?
+                    (() => { 
+                      switch(component?.format) {
+                        case 'DataGrid':
+                          return <CsvDataGrid userId={userId} slug={component?.query} />
+                        case 'BarChart':
+                          return <BarChart userId={userId} slug={component?.query} />                      
+                        default:
+                          return <></>
+                      }
+                    })():<></>
+                  }
+                </>      
+              </Box>        
+            ))
+            :<></>
+          }
+        </ResponsiveGridLayout>
+      :<></>}
 
-
-    <Snackbar
-      anchorOrigin= {{ vertical: 'top', horizontal: 'center' }}
-      key={snackbarKey}
-      autoHideDuration={6000}
-      open={openSnackbar}
-      onClose={handleSnackbarClose}
-      message={snackbarMessage}
-    />
+    <AddComponentDialog userId={userId} slug={slug} ref={addComponentRef} />
 
   </div>
   )

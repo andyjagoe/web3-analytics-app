@@ -1,8 +1,5 @@
 import {
   Typography,
-  Alert,
-  AlertTitle,
-  Container
 } from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
@@ -35,12 +32,6 @@ const Home: NextPage = () => {
         Decentralized. Where users own their data.
       </Typography>
 
-      <Container maxWidth="xs">
-        <Alert severity="error" sx={{marginTop: theme.spacing(8)}}>
-            <AlertTitle>Caution</AlertTitle>
-            Active development. Expect data to be wiped.
-        </Alert>
-      </Container>
     </div>
   )
 }

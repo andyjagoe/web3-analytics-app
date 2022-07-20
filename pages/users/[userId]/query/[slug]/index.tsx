@@ -92,6 +92,7 @@ const QueryPage: NextPage = () => {
     setLoadingCSV(true)
     readRemoteFile(bigFileURL, {
       worker: true,
+      download: true,
       header: true,
       skipEmptyLines: true,
       preview: 500,

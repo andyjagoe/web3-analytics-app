@@ -35,7 +35,7 @@ window.addEventListener('load', function() {
             // attach web3analytics plugin
             web3analytics.default({
                 appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
-                jsonRpcUrl: 'https://rinkeby.infura.io/v3/your_api_key'
+                jsonRpcUrl: 'https://polygon-mainnet.g.alchemy.com/v2/your_api_key'
             })
         ]
     })

@@ -1,11 +1,16 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useRef, Fragment } from 'react'
 import {
   Breadcrumbs,
   Typography,
   Grid,
   Alert,
   Stack,
-  Box
+  Box,
+  List,
+  ListSubheader,
+  ListItemButton,
+  ListItemText,
+  Paper
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import Link from '../../../../../src/Link'
@@ -17,9 +22,10 @@ import { useSession } from "next-auth/react"
 import useUser from "../../../../../hooks/useUser.jsx"
 import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
-import LoadingPage from "../../../../../components/LoadingPage"
+import StructTypeListItem from "../../../../../components/StructTypeListItem.jsx"
+import LoadingPage from "../../../../../components/LoadingPage.jsx"
 import axios from 'axios'
-import CodeMirror from '@uiw/react-codemirror'
+import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import { sql } from '@codemirror/lang-sql'
 import { sublime } from '@uiw/codemirror-theme-sublime'
 import { usePapaParse } from 'react-papaparse'
@@ -32,6 +38,8 @@ import {
 import { useSWRConfig } from 'swr'
 import { DateTime, Interval } from "luxon"
 import humanizeDuration from 'humanize-duration'
+import useDatabaseMetadata from "../../../../../hooks/useDatabaseMetadata.jsx"
+
 
 
 const CustomToolbar = () => {
@@ -45,10 +53,12 @@ const CustomToolbar = () => {
 
 
 const QueryPage: NextPage = () => {
+  const refs = useRef<ReactCodeMirrorRef>({})
   const router = useRouter()
   const { userId, slug } = router.query
   const {myUser} = useUser(userId)
   const {myItem} = useItem(userId, 'query', slug)
+  const {myDatabaseMetadata} = useDatabaseMetadata()
   const [sqlCode, setSqlCode] = useState("")
   const [queryError, setQueryError] = useState("")
   const [dataGridColumns, setDataGridColumns] = useState<string[]>([])
@@ -66,6 +76,7 @@ const QueryPage: NextPage = () => {
   }, []);
 
   
+
   useEffect(() => {
     if (userId) getCsv()
   }, [userId])
@@ -84,6 +95,24 @@ const QueryPage: NextPage = () => {
         console.log(error)
         setLoading(false)
     }
+  }
+
+
+  const insertStringInTemplate = (str:any) => {
+    if (refs.current && session?.user?.id === userId) {
+      const state = (refs.current as any).view?.viewState.state;
+      
+      (refs.current as any).view.dispatch({
+        changes: {
+          from: state.selection?.ranges[0]?.from || 0, 
+          to: state.selection?.ranges[0]?.to || 0, 
+          insert: str},
+        selection: {
+          anchor: state.selection?.ranges[0]?.from + str.length,
+        }
+     })
+    }
+
   }
 
 
@@ -211,7 +240,46 @@ const QueryPage: NextPage = () => {
       </Grid>
 
     <Grid container spacing={2} sx={{ marginTop: theme.spacing(2)}}>
-      <Grid item xs={12}>
+      <Grid item xs={3} sx={session?.user?.id !== userId ? {display:'none'}:{}}>
+        <Paper style={{maxHeight: 200, overflow: 'auto'}}>
+
+        <List
+          sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+          subheader={
+            <ListSubheader component="div" id="nested-list-subheader">
+              Table: events
+            </ListSubheader>
+          }
+        >
+          {myDatabaseMetadata?.TableMetadataList[0]?.Columns?.map((item:any) => 
+            (
+
+              (() => { 
+                switch(item.Type.substr(0,4)) {
+                  case 'stru':
+                    return <StructTypeListItem 
+                              item={item} 
+                              key={item.Name} 
+                              insertStringInTemplate={insertStringInTemplate}
+                            />
+                  default:
+                    return <ListItemButton 
+                              key={item.Name} 
+                              sx={{ pl: 2 }} 
+                              onClick={() => insertStringInTemplate(item.Name)}
+                            >
+                              <ListItemText primary={item.Name} secondary={item.Type} />
+                            </ListItemButton>
+                }
+              })()
+
+            )) }
+        </List>
+        </Paper>
+      </Grid>
+      <Grid item xs={session?.user?.id !== userId ? 12:9}>
         <CodeMirror
           readOnly={session?.user?.id === userId ? false:true}
           value={myItem? myItem?.Item?.query:''}
@@ -219,6 +287,7 @@ const QueryPage: NextPage = () => {
           extensions={[sql()]}
           theme={sublime}
           onChange={onChange}
+          ref={refs}
         />
       </Grid>
       <Grid item xs={12}>

@@ -295,7 +295,7 @@ const QueryPage: NextPage = () => {
       <Grid item xs={12}>
         <Grid container direction="row-reverse" sx={{ alignItems: 'center'}}>
           <LoadingButton
-                  disabled={disable}
+                  disabled={session?.user?.id === userId ? false:true}
                   variant="contained"
                   loading={loading}
                   onClick={() => startQuery() }

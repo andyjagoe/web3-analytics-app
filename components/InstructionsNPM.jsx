@@ -37,7 +37,7 @@ const analytics = Analytics({
   plugins: [
     web3Analytics({
       appId: '${myOnChainApp? myOnChainApp.appAddress:'YOUR_WEB3ANALYTICS_APP_ID'}',
-      jsonRpcUrl: 'https://polygon-mainnet.g.alchemy.com/v2/your_key_here'
+      jsonRpcUrl: 'https://eth-goerli.g.alchemy.com/v2/your_key_here'
     })
   ]
 })`}

@@ -173,7 +173,7 @@ const AppPage: NextPage = () => {
               Balance
             </Typography>              
             <Typography component="h1" variant="h3">
-              {myBalance? Number(myBalance.formatted).toFixed(5):'0'}                
+              {myBalance? Number(myBalance).toFixed(5):'0'}                
             </Typography>
             <Link variant="caption" 
                 underline="none"

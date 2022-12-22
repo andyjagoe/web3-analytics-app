@@ -14,6 +14,7 @@ import {
   Stack,
   Tab,
   Tabs,
+  CircularProgress
 } from '@mui/material'
 import {
   useAccount,
@@ -54,7 +55,7 @@ const AppPage: NextPage = () => {
   const { userId, appSlug } = router.query
   const {myUser} = useUser(userId)
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
-  const {myBalance} = useAppBalance(userId, appSlug)
+  const {myBalance, isLoading:balanceIsLoading} = useAppBalance(userId, appSlug)
   const {myItem} = useItem(userId, 'app', appSlug)
   const {myUserCount} = useAppUserCount(userId, appSlug)
   const { data: session } = useSession()
@@ -173,7 +174,9 @@ const AppPage: NextPage = () => {
               Balance
             </Typography>              
             <Typography component="h1" variant="h3">
-              {myBalance? Number(myBalance).toFixed(5):'0'}                
+              {balanceIsLoading && <CircularProgress size="inherit" />}
+              {!balanceIsLoading && myBalance && Number(myBalance).toFixed(5)}              
+              {!balanceIsLoading && !myBalance && Number("0").toFixed(0)}                
             </Typography>
             <Link variant="caption" 
                 underline="none"

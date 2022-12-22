@@ -14,7 +14,7 @@ import {
     useConnect,
     useDisconnect,
     useNetwork,
-    useSigner,
+    useSigner,    
 } from 'wagmi'
 import { ethers } from "ethers"
 import Web3Analytics from "../../schema/Web3Analytics.json"

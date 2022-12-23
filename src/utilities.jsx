@@ -6,7 +6,19 @@ export function getSupportedChains() {
     const chainNames = JSON.parse(process.env.NEXT_PUBLIC_CHAINS)
     const chains = []
     for (const name of chainNames) {
-        chains.push(chain[name])
+        if (name === 'hardhat') {
+            const hardhat = {
+                "id":1337,
+                "name":"Hardhat",
+                "network":"hardhat",
+                "rpcUrls": {
+                    "default":"http://localhost:8545"
+                }
+            }
+            chains.push(hardhat)
+        } else {
+            chains.push(chain[name])
+        }
     }
     return chains
 }

@@ -9,7 +9,8 @@ import {
   InputAdornment,
   Stack,
   Typography,
-  Link
+  Link,
+  Avatar,
 } from '@mui/material'
 import { ethers } from "ethers"
 import Web3Analytics from "../schema/Web3Analytics.json"
@@ -20,8 +21,11 @@ import {
   useBalance,
   useSigner,
 } from 'wagmi'
-import EthIcon from './EthIcon';
-import { BigNumberInput } from 'big-number-input';
+import { BigNumberInput } from 'big-number-input'
+import useOnChainApp from "../hooks/useOnChainApp.jsx"
+
+
+const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY
 
 
 const AddFundsDialog = (props, ref) => {
@@ -43,6 +47,9 @@ const AddFundsDialog = (props, ref) => {
     const [disable, setDisabled] = useState(false)
     const [loading, setLoading] = useState(false)  
     const [open, setOpen] = useState(false)
+    const {myOnChainApp} = useOnChainApp(props.userId, props.appSlug)
+
+
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -51,10 +58,18 @@ const AddFundsDialog = (props, ref) => {
     };
 
     useEffect(() => {
-      if (!account) {
-      }
-  }, [account])
+      setDisabled(formValidation())
+    }, [funds])
 
+
+    const formValidation = () => {   
+      if (Number(funds) === 0        
+          ) {
+        return true
+      } else {
+        return false
+      }
+    }
 
     useImperativeHandle(ref, () => ({
       handleOpenClick() {
@@ -66,7 +81,7 @@ const AddFundsDialog = (props, ref) => {
     const addFunds = async () => {
       if (!signer 
           || !account?.address 
-          || funds === "0"
+          || Number(funds) === 0
           || !process.env.NEXT_PUBLIC_WEB3ANALYTICS
           ) return
 
@@ -83,7 +98,7 @@ const AddFundsDialog = (props, ref) => {
 
       try {
         const tx = await contract.topUpBalance(
-          account.address,
+          myOnChainApp? myOnChainApp.appAddress:null,
           {value: funds}
         )
         await tx.wait()
@@ -131,12 +146,28 @@ const AddFundsDialog = (props, ref) => {
                     <TextField
                         required
                         fullWidth
-                        disabled={disable}
                         InputProps={{
                             startAdornment: 
                             <InputAdornment position="start">                        
-                                <Stack alignItems="flex-start" justifyContent="flex-start" spacing={0}>
-                                    <EthIcon fontSize="inherit"/>
+                                <Stack alignItems="flex-start" justifyContent="flex-start" spacing={0}>                                
+                                  {(() => { 
+                                    switch(CURRENCY) {
+                                      case 'MATIC':
+                                        return <>
+                                              <Avatar                                  
+                                                src="/static/images/coins/polygon-matic-logo-256.png"
+                                                sx={{ width: 24, height: 24 }}
+                                                />                             
+                                              </>
+                                      default:
+                                        return <>
+                                                <Avatar                                  
+                                                src="/static/images/coins/ethereum-eth-logo-256.png"
+                                                sx={{ width: 24, height: 24 }}
+                                                />
+                                              </>                           
+                                    }
+                                  })()}                                     
                                 </Stack>
                             </InputAdornment>,
                         }}
@@ -156,7 +187,7 @@ const AddFundsDialog = (props, ref) => {
                   &nbsp; 
                   {balance? 
                     <>
-                    Balance: <strong>{formatBalance(balance)}&nbsp;ETH</strong>
+                    Balance: <strong>{formatBalance(balance)}&nbsp;{CURRENCY}</strong>
                     </>
                     : ''
                   }   

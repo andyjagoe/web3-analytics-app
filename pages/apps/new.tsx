@@ -7,13 +7,17 @@ import {
   Button,
   TextField,
   Container,
+  InputAdornment,
+  Stack,
 } from '@mui/material'
+import { BigNumberInput } from 'big-number-input'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
     useAccount,
     useConnect,
     useDisconnect,
     useNetwork,
+    useContractRead,
     useSigner,    
 } from 'wagmi'
 import { ethers } from "ethers"
@@ -32,10 +36,15 @@ import axios from 'axios'
 import validUrl from 'valid-url'
 
 
+const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY
+
+
 const NewApp: NextPage = () => {
     const theme = useTheme()
+    const [funds, setFunds] = useState("0")
     const [isAppRegistered, setIsAppRegistered] = useState(false)
     const [urlError, setUrlError] = useState(false)
+    const [minFundingError, setMinFundingError] = useState(false)
     const [appName, setAppName] = useState("")
     const [appURL, setAppURL] = useState("")
     const [previousSigner, setPreviousSigner] = useState({})
@@ -59,6 +68,12 @@ const NewApp: NextPage = () => {
         switchNetwork,
     } = useNetwork()
     const { disconnect } = useDisconnect()
+    const {data:minimumAppRegBalance} = useContractRead({
+        addressOrName: process.env.NEXT_PUBLIC_WEB3ANALYTICS as string,
+        contractInterface: Web3Analytics
+        },
+        'getMinimumAppRegBalance'        
+    )
     const router = useRouter()
     const { data: session, status } = useSession({
         required: true,
@@ -71,12 +86,13 @@ const NewApp: NextPage = () => {
     useEffect(() => {
         if (signer && signer !== previousSigner) checkRegistration()
         setDisabled(formValidation())
-    }, [signer, appName, appURL])
+    }, [signer, appName, appURL, funds, minimumAppRegBalance])
 
 
     const formValidation = () => {   
         if (checkUrl()
-            || appName == ""
+            || appName === ""
+            || checkMinimumFunding()
             ) {
           return true
         } else {
@@ -91,6 +107,16 @@ const NewApp: NextPage = () => {
             return true
         }
         setUrlError(false)
+        return false
+    }
+
+
+    const checkMinimumFunding = () => {
+        if (Number(funds) < Number(minimumAppRegBalance)) {
+            if (Number(funds) !== 0) setMinFundingError(true)
+            return true
+        }
+        if (Number(funds) !== 0) setMinFundingError(false)
         return false
     }
 
@@ -110,6 +136,7 @@ const NewApp: NextPage = () => {
         setPreviousSigner(signer)
     }
 
+
     const registerAppOnChain = async () => {
         if (!signer || !process.env.NEXT_PUBLIC_WEB3ANALYTICS) return
 
@@ -123,7 +150,11 @@ const NewApp: NextPage = () => {
         )
 
         try {
-            const tx = await contract.registerApp(appName, appURL)
+            const tx = await contract.registerApp(
+                appName, 
+                appURL,
+                {value: funds}
+            )
             await tx.wait()
     
             const response = await registerAppInDb(account?.address as string, appName, 0)
@@ -162,6 +193,18 @@ const NewApp: NextPage = () => {
         if (registerAppLoading) return true
         if (disable) return true
         return false
+    }
+
+
+    const getAccountFundingLabel = () => {
+        if (Number(minimumAppRegBalance) === 0) {
+            return `Buy credits (${CURRENCY})`
+        } else {
+            const balAsBn = ethers.BigNumber.from(minimumAppRegBalance)
+            const balAsEth = ethers.utils.formatEther(balAsBn)
+            const balFormatted = Number(balAsEth).toFixed(2)
+            return `Buy credits (${balFormatted} ${CURRENCY} minimum)`
+        }
     }
 
 
@@ -263,6 +306,50 @@ const NewApp: NextPage = () => {
                                 onChange={e => setAppURL(e.target.value)}
                                 inputProps={{ style: { fontSize: "0.95rem" } }}
                             />
+                        </Grid>
+                        <Grid item xs={12}>
+                        <BigNumberInput 
+                            decimals={18}
+                            onChange={setFunds}
+                            value={funds} 
+                            renderInput={
+                                (props: any): any => 
+                                <TextField
+                                    fullWidth
+                                    label={ getAccountFundingLabel()}
+                                    error={minFundingError}
+                                    helperText="You pay gas for each new user (usually less than 1 cent)"
+                                    InputProps={{
+                                        startAdornment: 
+                                        <InputAdornment position="start">                        
+                                            <Stack alignItems="flex-start" justifyContent="flex-start" spacing={0}>                                
+                                            {(() => { 
+                                                switch(CURRENCY) {
+                                                case 'MATIC':
+                                                    return <>
+                                                        <Avatar                                  
+                                                            src="/static/images/coins/polygon-matic-logo-256.png"
+                                                            sx={{ width: 24, height: 24 }}
+                                                            />                             
+                                                        </>
+                                                default:
+                                                    return <>
+                                                            <Avatar                                  
+                                                            src="/static/images/coins/ethereum-eth-logo-256.png"
+                                                            sx={{ width: 24, height: 24 }}
+                                                            />
+                                                        </>                           
+                                                }
+                                            })()}                                     
+                                            </Stack>
+                                        </InputAdornment>,
+                                    }}
+                                    inputProps={{
+                                        style: { textAlign: 'right' },
+                                    }}
+                                    {...props}
+                                />
+                        }/>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField

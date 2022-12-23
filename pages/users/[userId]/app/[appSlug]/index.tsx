@@ -14,7 +14,8 @@ import {
   Stack,
   Tab,
   Tabs,
-  CircularProgress
+  CircularProgress,
+  Avatar
 } from '@mui/material'
 import {
   useAccount,
@@ -47,6 +48,8 @@ function a11yProps(index:number) {
     };
 }
 
+
+const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY
 
 
 const AppPage: NextPage = () => {
@@ -171,13 +174,35 @@ const AppPage: NextPage = () => {
         >
           <>
             <Typography variant="body2">
-              Balance
-            </Typography>              
-            <Typography component="h1" variant="h3">
-              {balanceIsLoading && <CircularProgress />}
-              {!balanceIsLoading && myBalance && Number(myBalance).toFixed(5)}              
-              {!balanceIsLoading && !myBalance && Number("0").toFixed(0)}                
-            </Typography>
+              Credits
+            </Typography> 
+
+            <Stack direction="row" sx={{ alignItems: 'center'}}>
+              <Typography component="h1" variant="h3">
+                {(() => { 
+                  switch(CURRENCY) {
+                    case 'MATIC':
+                      return <>
+                            <Avatar                                  
+                              src="/static/images/coins/polygon-matic-logo-256.png"
+                              />                             
+                            </>
+                    default:
+                      return <>
+                              <Avatar                                  
+                              src="/static/images/coins/ethereum-eth-logo-256.png"
+                              />
+                            </>                           
+                  }
+                })()}     
+              </Typography>                         
+              <Typography component="h1" variant="h3" sx={{ paddingLeft: theme.spacing(1)}}>              
+                {balanceIsLoading && <CircularProgress />}
+                {!balanceIsLoading && myBalance && Number(myBalance).toFixed(5)}              
+                {!balanceIsLoading && !myBalance && Number("0").toFixed(0)}                
+              </Typography>                
+            </Stack>                                                    
+
             <Link variant="caption" 
                 underline="none"
                 alignItems="center"

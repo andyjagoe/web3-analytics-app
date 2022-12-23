@@ -91,7 +91,6 @@ const AppPage: NextPage = () => {
   };
 
   const handleAddFundsClick = () => {
-    console.log("handleAddFundsClick")
     if (account) {
       handleAddFundsOpenClick()
     } else {

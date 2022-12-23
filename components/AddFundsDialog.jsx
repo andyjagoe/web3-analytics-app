@@ -119,7 +119,7 @@ const AddFundsDialog = (props, ref) => {
     }
 
     const formatBalance = (myBalance) => {
-      const formatted = Number(myBalance.formatted).toFixed(5)
+      const formatted = Number(myBalance.formatted).toFixed(4)
       return formatted
     }
 

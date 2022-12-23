@@ -197,7 +197,7 @@ const NewApp: NextPage = () => {
 
 
     const getAccountFundingLabel = () => {
-        if (Number(minimumAppRegBalance) === 0) {
+        if (!minimumAppRegBalance || Number(minimumAppRegBalance) === 0) {
             return `Buy credits (${CURRENCY})`
         } else {
             const balAsBn = ethers.BigNumber.from(minimumAppRegBalance)

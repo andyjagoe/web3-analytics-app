@@ -57,7 +57,7 @@ const AppPage: NextPage = () => {
   const {myOnChainApp} = useOnChainApp(userId, appSlug)
   const {myBalance, isLoading:balanceIsLoading} = useAppBalance(userId, appSlug)
   const {myItem} = useItem(userId, 'app', appSlug)
-  const {myUserCount} = useAppUserCount(userId, appSlug)
+  const {myUserCount, isLoading:userCountIsLoading} = useAppUserCount(userId, appSlug)
   const { data: session } = useSession()
   const { data: signer } = useSigner()
   const { data: account } = useAccount()
@@ -213,8 +213,10 @@ const AppPage: NextPage = () => {
               <Typography variant="body2">
                 Users
               </Typography>              
-              <Typography component="h1" variant="h3">
-                {myUserCount? myUserCount:''}
+              <Typography component="h1" variant="h3">                
+                {userCountIsLoading && <CircularProgress />}
+                {!userCountIsLoading && myUserCount} 
+                {!userCountIsLoading && !myUserCount && '0'}           
               </Typography>
               </>
         </Paper>

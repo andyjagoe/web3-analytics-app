@@ -72,7 +72,12 @@ const NewApp: NextPage = () => {
         addressOrName: process.env.NEXT_PUBLIC_WEB3ANALYTICS as string,
         contractInterface: Web3Analytics
         },
-        'getMinimumAppRegBalance'        
+        'getMinimumAppRegBalance',
+        {
+            onError(error) {
+                console.log('Error', error)
+            }
+        }        
     )
     const router = useRouter()
     const { data: session, status } = useSession({

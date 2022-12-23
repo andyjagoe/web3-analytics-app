@@ -174,7 +174,7 @@ const AppPage: NextPage = () => {
               Balance
             </Typography>              
             <Typography component="h1" variant="h3">
-              {balanceIsLoading && <CircularProgress size="inherit" />}
+              {balanceIsLoading && <CircularProgress />}
               {!balanceIsLoading && myBalance && Number(myBalance).toFixed(5)}              
               {!balanceIsLoading && !myBalance && Number("0").toFixed(0)}                
             </Typography>

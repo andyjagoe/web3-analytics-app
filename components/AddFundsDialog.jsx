@@ -11,6 +11,9 @@ import {
   Typography,
   Link,
   Avatar,
+  Alert,
+  Grid,
+  Collapse
 } from '@mui/material'
 import { ethers } from "ethers"
 import {useTheme} from '@mui/material/styles'
@@ -56,6 +59,8 @@ const AddFundsDialog = (props, ref) => {
     )    
     const [disable, setDisabled] = useState(false)
     const [loading, setLoading] = useState(false)  
+    const [addUpdateError, setAddUpdateError] = useState(false)
+    const [addUpdateErrorMessage, setAddUpdateErrorMessage] = useState("")  
     const [open, setOpen] = useState(false)
     const {myOnChainApp} = useOnChainApp(props.userId, props.appSlug)
 
@@ -97,6 +102,8 @@ const AddFundsDialog = (props, ref) => {
 
       console.log(process.env.NEXT_PUBLIC_WEB3ANALYTICS)
 
+      setAddUpdateError(false)
+      setAddUpdateErrorMessage("")  
       setDisabled(true)
       setLoading(true)
     
@@ -117,6 +124,10 @@ const AddFundsDialog = (props, ref) => {
 
       } catch (error) {
           console.log(error)
+          setAddUpdateError(true)
+          setAddUpdateErrorMessage(
+            error.message
+          )    
       }    
 
       setDisabled(false)
@@ -212,6 +223,26 @@ const AddFundsDialog = (props, ref) => {
                 >
               (Disconnect)
             </Link> 
+
+            <Grid 
+              container 
+              spacing={1}
+              sx={{ 
+                marginTop: theme.spacing(1),
+              }}
+            >
+              <Grid 
+                item 
+                xs={12}
+                sx={{ 
+                  display: addUpdateError? "block" : "none" 
+                }}
+              >
+                <Collapse in={addUpdateError}>  
+                  <Alert severity="error">{addUpdateErrorMessage}</Alert>
+                </Collapse>
+              </Grid>
+            </Grid>
             </>
           )}
 

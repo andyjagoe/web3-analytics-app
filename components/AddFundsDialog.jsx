@@ -28,6 +28,7 @@ import {
 } from 'wagmi'
 import { BigNumberInput } from 'big-number-input'
 import useOnChainApp from "../hooks/useOnChainApp.jsx"
+import { AccountBalance } from '@mui/icons-material';
 
 
 const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY
@@ -74,17 +75,26 @@ const AddFundsDialog = (props, ref) => {
 
     useEffect(() => {
       setDisabled(formValidation())
-    }, [funds])
+    }, [funds, balance])
 
 
     const formValidation = () => {   
-      if (Number(funds) === 0        
+      if (Number(funds) === 0
+          || checkBalance()
           ) {
         return true
       } else {
         return false
       }
     }
+
+    const checkBalance = () => {
+      if (!balance) return true
+      const fundBn = ethers.BigNumber.from(funds)
+      if (fundBn.lte(balance.value)) return false
+      return true
+    }
+
 
     useImperativeHandle(ref, () => ({
       handleOpenClick() {

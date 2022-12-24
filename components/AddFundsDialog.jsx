@@ -13,6 +13,7 @@ import {
   Avatar,
 } from '@mui/material'
 import { ethers } from "ethers"
+import {useTheme} from '@mui/material/styles'
 import Web3Analytics from "../schema/Web3Analytics.json"
 import LoadingButton from '@mui/lab/LoadingButton'
 import {
@@ -20,6 +21,7 @@ import {
   useDisconnect,
   useBalance,
   useSigner,
+  useNetwork
 } from 'wagmi'
 import { BigNumberInput } from 'big-number-input'
 import useOnChainApp from "../hooks/useOnChainApp.jsx"
@@ -29,7 +31,15 @@ const CURRENCY = process.env.NEXT_PUBLIC_CURRENCY
 
 
 const AddFundsDialog = (props, ref) => {
+    const theme = useTheme()
     const [funds, setFunds] = useState("0")
+    const {
+        activeChain,
+        chains,
+        isLoading,
+        pendingChainId,
+        switchNetwork,
+    } = useNetwork()
     const { disconnect } = useDisconnect({
       onSettled(data, error) {
         handleClose()
@@ -134,6 +144,8 @@ const AddFundsDialog = (props, ref) => {
       >
         <DialogTitle id="form-dialog-add-funds">Add Funds</DialogTitle>
         <DialogContent>
+          {chains.find(({ id }) => id === activeChain?.id) && (
+            <>
             <BigNumberInput 
                 decimals={18} 
                 name="funds"
@@ -200,6 +212,37 @@ const AddFundsDialog = (props, ref) => {
                 >
               (Disconnect)
             </Link> 
+            </>
+          )}
+
+          {!chains.find(({ id }) => id === activeChain?.id) && (
+              <>
+                  <Typography variant="overline" display="block" gutterBottom>
+                      Your wallet is set to an unsupported network.
+                  </Typography>
+                  {chains.map((x) => (
+                      <Button
+                          disabled={!switchNetwork || x.id === activeChain?.id}
+                          fullWidth
+                          variant="outlined"
+                          key={x.id}
+                          onClick={() => switchNetwork?.(x.id)}
+                      >
+                      Switch to {x.name}
+                      {isLoading && pendingChainId === x.id && ' (switching)'}
+                      </Button>
+                  ))}
+                  <Button
+                      fullWidth
+                      variant="outlined"
+                      color="error"
+                      onClick={() => disconnect()}
+                      sx={{marginTop: theme.spacing(2)}}
+                  >
+                      Disconnect
+                  </Button>
+              </>
+          )}
 
         </DialogContent>
         <DialogActions>

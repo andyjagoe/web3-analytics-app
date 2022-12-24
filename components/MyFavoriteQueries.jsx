@@ -15,7 +15,11 @@ const MyFavoriteQueries = () => {
 
                 {!isLoading && !isError && myFavoriteQueries?.length > 0 && myFavoriteQueries.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell 
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="favorites"
+                    />
                 ))}
                 
                 {!isLoading && !isError && myFavoriteQueries?.length === 0 &&

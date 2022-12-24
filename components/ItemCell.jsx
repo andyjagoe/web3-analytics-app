@@ -3,16 +3,18 @@ import {Card,
     Grid,
     Stack,
     Avatar,
+    Link
 } from '@mui/material'
 import {useTheme} from '@mui/material/styles'
-import Link from '../src/Link'
 import useUser from "../hooks/useUser.jsx"
 import useOnChainAppData from "../hooks/useOnChainAppData.jsx"
 import StarButton from "./StarButton.jsx"
+import { useRouter } from 'next/router'
   
 
-const ItemCell = ({item}) => {
+const ItemCell = ({item, from}) => {
     const theme = useTheme()
+    const router = useRouter()
     const {myAppData} = useOnChainAppData(item.address)
     const {myUser} = useUser(item.pk.substring(5))
     const formattedType = item.type.toLowerCase()
@@ -52,7 +54,9 @@ const ItemCell = ({item}) => {
                             >
                                 <Link                                                     
                                     color="inherit" 
-                                    href={`/users/${item.pk.substring(5)}/${formattedType}/${item.slug}`}
+                                    onClick={() => {router.push(
+                                        `/users/${item.pk.substring(5)}/${formattedType}/${item.slug}${from? `?from=${from}`:""}`
+                                    )}}
                                 >
                                     {item.name? item.name:myAppData? myAppData.appName:item.slug}
                                 </Link>
@@ -60,7 +64,9 @@ const ItemCell = ({item}) => {
                                     Created by&nbsp; 
                                     <Link                         
                                         color="inherit" 
-                                        href={`/users/${item.pk.substring(5)}`}
+                                        onClick={() => {router.push(
+                                            `/users/${item.pk.substring(5)}`
+                                        )}}
                                     >
                                         {myUser?.Item?.name? myUser.Item.name:item.pk.substring(5)}
                                     </Link>

@@ -16,7 +16,11 @@ const MyFavoriteDashboards = () => {
                 {!isLoading && !isError && myFavoriteDashboards?.length > 0 
                 && myFavoriteDashboards.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell 
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="favorites"
+                    />
                 ))}
                 
                 {!isLoading && !isError && myFavoriteDashboards?.length === 0 &&

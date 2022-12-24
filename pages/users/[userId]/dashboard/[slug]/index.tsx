@@ -1,13 +1,13 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import {
   Breadcrumbs,
   Typography,
   Grid,
   Box,
   Button,
+  Link
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import Link from '../../../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -41,6 +41,15 @@ const DashboardPage: NextPage = () => {
   const addComponentRef = useRef()
   const { data: session } = useSession()
   const { mutate } = useSWRConfig()
+  const [fromNav, setFromNav] = useState("")
+
+
+  useEffect(() => {
+    const { from } = router.query
+    if (from && from !== fromNav) {
+      setFromNav(from as string)
+    }
+  }, [router.query])
 
 
   const layoutChange = async (layout: any) => {
@@ -81,10 +90,46 @@ const DashboardPage: NextPage = () => {
         <Grid item xs={9}>
           <Grid container>
             <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" href="/">Home</Link>
-              <Link color="inherit" href={`/users/${userId}`}>
-                {myUser?.Item?.name? myUser.Item.name:userId}
+              <Link 
+                color="inherit" 
+                onClick={() => {router.push('/')}}
+              >
+                Home
               </Link>
+
+              {(() => { 
+                  switch(fromNav) {
+                  case 'popular':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/dashboards/popular')}}
+                              >
+                              Popular Dashboards
+                            </Link>
+                  case 'favorites':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/dashboards/favorites')}}
+                              >
+                              Favorite Dashboards
+                            </Link>
+                  case 'mine':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/dashboards/mine')}}
+                              >
+                              My Dashboards
+                            </Link>
+                  default:
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push(`/users/${userId}`)}}
+                              >
+                              {myUser?.Item?.name? myUser.Item.name:userId}
+                            </Link>                           
+                  }
+              })()}  
+
               <Typography color="textPrimary">{myItem? myItem?.Item?.name:''}</Typography>
             </Breadcrumbs>
           </Grid>

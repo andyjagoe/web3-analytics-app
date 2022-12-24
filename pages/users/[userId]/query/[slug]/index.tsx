@@ -10,10 +10,10 @@ import {
   ListSubheader,
   ListItemButton,
   ListItemText,
-  Paper
+  Paper,
+  Link
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
-import Link from '../../../../../src/Link'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -70,6 +70,9 @@ const QueryPage: NextPage = () => {
   const { data: session } = useSession()
   const { readRemoteFile } = usePapaParse()
   const { mutate } = useSWRConfig()
+  const [fromNav, setFromNav] = useState("")
+
+
 
   const onChange = useCallback((value:any, viewUpdate:any) => {
     setSqlCode(value)
@@ -79,6 +82,10 @@ const QueryPage: NextPage = () => {
 
   useEffect(() => {
     if (userId) getCsv()
+    const { from } = router.query
+    if (from && from !== fromNav) {
+      setFromNav(from as string)
+    }
   }, [userId])
 
 
@@ -223,10 +230,45 @@ const QueryPage: NextPage = () => {
         <Grid item xs={9}>
           <Grid container>
             <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" href="/">Home</Link>
-              <Link color="inherit" href={`/users/${userId}`}>
-                {myUser?.Item?.name? myUser.Item.name:userId}
+              <Link 
+                color="inherit" 
+                onClick={() => {router.push('/')}}
+              >
+                Home
               </Link>
+
+              {(() => { 
+                  switch(fromNav) {
+                  case 'popular':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/queries/popular')}}
+                              >
+                              Popular Queries
+                            </Link>
+                  case 'favorites':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/queries/favorites')}}
+                              >
+                              Favorite Queries
+                            </Link>
+                  case 'mine':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/queries/mine')}}
+                              >
+                              My Queries
+                            </Link>
+                  default:
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push(`/users/${userId}`)}}
+                              >
+                              {myUser?.Item?.name? myUser.Item.name:userId}
+                            </Link>                           
+                  }
+              })()}  
               <Typography color="textPrimary">{myItem? myItem?.Item?.name:''}</Typography>
             </Breadcrumbs>
           </Grid>

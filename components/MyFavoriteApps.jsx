@@ -15,7 +15,11 @@ const MyFavoriteApps = () => {
 
                 {!isLoading && !isError && myFavoriteApps?.length > 0 && myFavoriteApps.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="favorites"
+                    />
                 ))}
 
                 {!isLoading && !isError && myFavoriteApps?.length === 0 &&

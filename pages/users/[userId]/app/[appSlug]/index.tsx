@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Breadcrumbs,
   Typography,
@@ -68,6 +68,16 @@ const AppPage: NextPage = () => {
   const addFundsRef = useRef()
   const connectWalletRef = useRef()
   const [tabValue, setTabValue] = useState(0)
+  const [fromNav, setFromNav] = useState("")
+
+
+  useEffect(() => {
+    const { from } = router.query
+    if (from && from !== fromNav) {
+      setFromNav(from as string)
+    }
+  }, [router.query])
+
 
   // Handle instructions dialog
   const handleOpenClick = () => {
@@ -131,10 +141,45 @@ const AppPage: NextPage = () => {
         <Grid item xs={9}>
           <Grid container>
             <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" href="/">Home</Link>
-              <Link color="inherit" href={`/users/${userId}`}>
-                {myUser?.Item?.name? myUser.Item.name:userId}
+              <Link 
+                color="inherit" 
+                onClick={() => {router.push('/')}}
+              >Home
               </Link>
+
+              {(() => { 
+                  switch(fromNav) {
+                  case 'popular':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/apps/popular')}}
+                              >
+                              Popular Apps
+                            </Link>
+                  case 'favorites':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/apps/favorites')}}
+                              >
+                              Favorite Apps
+                            </Link>
+                  case 'mine':
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push('/apps/mine')}}
+                              >
+                              My Apps
+                            </Link>
+                  default:
+                      return <Link 
+                                color="inherit" 
+                                onClick={() => {router.push(`/users/${userId}`)}}
+                              >
+                              {myUser?.Item?.name? myUser.Item.name:userId}
+                            </Link>                           
+                  }
+              })()}                                     
+              
               <Typography color="textPrimary">{myOnChainApp? myOnChainApp.appName:appSlug}</Typography>
             </Breadcrumbs>
           </Grid>

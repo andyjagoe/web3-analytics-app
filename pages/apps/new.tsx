@@ -9,6 +9,7 @@ import {
   Container,
   InputAdornment,
   Stack,
+  Link
 } from '@mui/material'
 import { BigNumberInput } from 'big-number-input'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -29,7 +30,6 @@ import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useSession, signIn } from "next-auth/react"
-import Link from '../../src/Link'
 import LoadingPage from '../../components/LoadingPage.jsx'
 import { useRouter } from 'next/router'
 import axios from 'axios'
@@ -226,8 +226,18 @@ const NewApp: NextPage = () => {
         </Head>
 
         <Breadcrumbs aria-label="breadcrumb" sx={{ marginTop: theme.spacing(4)}}>
-            <Link color="inherit" href="/">Home</Link>
-            <Link color="inherit" href="/apps/popular">Apps</Link>
+            <Link 
+                color="inherit"
+                onClick={() => {router.push('/')}} 
+            >
+                Home
+            </Link>
+            <Link 
+                color="inherit" 
+                onClick={() => {router.push('/apps/popular')}} 
+            >
+                Apps
+            </Link>
             <Typography color="textPrimary">New</Typography>
         </Breadcrumbs>
 

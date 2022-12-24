@@ -16,7 +16,11 @@ const MyQueries = () => {
 
                 {!isLoading && myQueries.Items?.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell 
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="mine"
+                    />
                 ))}            
 
                 {!isLoading && myQueries.Items?.length === 0 &&

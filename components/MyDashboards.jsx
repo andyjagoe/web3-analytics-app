@@ -16,7 +16,11 @@ const MyDashboards = () => {
 
                 {!isLoading && myDashboards.Items?.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell 
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="mine"
+                    />
                 ))}            
 
                 {!isLoading && myDashboards.Items?.length === 0 &&

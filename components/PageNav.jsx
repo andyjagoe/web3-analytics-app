@@ -3,10 +3,10 @@ import {
     Breadcrumbs,
     Typography,
     Grid,
-    Button
+    Button,
+    Link
   } from '@mui/material'
 import { Add } from '@mui/icons-material'
-import Link from '../src/Link'
 import { useRouter } from 'next/router'
 import {useTheme} from '@mui/material/styles'
 
@@ -20,7 +20,12 @@ const PageNav = ({category}) => {
         <Grid item xs={9}>
           <Grid container>
             <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" href="/">Home</Link>
+              <Link 
+                color="inherit" 
+                onClick={() => {router.push('/')}}
+              >
+                Home
+              </Link>
               <Typography color="textPrimary">{category}</Typography>
             </Breadcrumbs>
           </Grid>

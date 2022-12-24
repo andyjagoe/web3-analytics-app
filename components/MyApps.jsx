@@ -16,7 +16,11 @@ const MyApps = () => {
 
                 {!isLoading && myApps.Items?.map((item) => 
                 (
-                    <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                    <ItemCell 
+                        key={`#${item.pk}#${item.slug}`} 
+                        item={item} 
+                        from="mine"
+                    />
                 ))}            
 
                 {!isLoading && myApps.Items?.length === 0 &&

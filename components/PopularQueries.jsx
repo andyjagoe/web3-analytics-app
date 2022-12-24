@@ -14,7 +14,11 @@ const PopularQueries = () => {
 
                 {!isLoading && popularQueries.Items?.map((item) => 
                 (
-                        <ItemCell key={`#${item.pk}#${item.slug}`} item={item} />
+                        <ItemCell 
+                            key={`#${item.pk}#${item.slug}`} 
+                            item={item} 
+                            from="popular"
+                        />
                 ))
             }            
             </Grid>

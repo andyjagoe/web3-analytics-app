@@ -21,7 +21,7 @@ function downloadFile(reqUrl, fileName){
             res.data.on("end", () => {
                 console.log("download completed");
                 decompress(filePath, dir).then(files => {
-                    console.log('decompress done!', files);
+                    console.log('decompress done!');
                     
                     // delete the tar.gz file
                     fs.rmSync(filePath, { recursive: true })

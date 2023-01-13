@@ -13,8 +13,14 @@ function downloadFile(reqUrl, fileName){
         decompress: true
     }).then(res => {
         if (res.status == 200) {            
-            const SUB_FOLDER = '../lib/geo';
+            const SUB_FOLDER = '../lib/geo'
             const dir = path.resolve(__dirname, SUB_FOLDER)
+
+            // create directory if it doesn't exist
+            if (!fs.existsSync(dir)){
+                fs.mkdirSync(dir);
+            }
+            
             const filePath = path.resolve(__dirname, SUB_FOLDER, fileName)
 
             res.data.pipe(fs.createWriteStream(filePath));

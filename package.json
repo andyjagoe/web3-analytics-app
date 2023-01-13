@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
+    "@maxmind/geoip2-node": "^3.5.0",
     "@mui/icons-material": "^5.8.0",
     "@mui/lab": "^5.0.0-alpha.84",
     "@mui/material": "^5.8.0",

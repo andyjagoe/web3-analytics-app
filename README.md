@@ -1,8 +1,6 @@
 # Web3 Analytics Dashboard Builder and Main User Interface
 
-This project is a [Next.js](https://nextjs.org/) app bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app). It serves as the primary user interface for [Web3 Analytics](https://web3analytics.network/) and allows users to register apps, create analytics queries, and build dashboards.
-
-Documentation for Web3 Analytics is available [here](https://web3-analytics.gitbook.io/product-docs/).
+This project is the primary user interface for [Web3 Analytics](https://web3analytics.network/) and allows users to register apps, create analytics queries, and build dashboards. Documentation for Web3 Analytics is available [here](https://web3-analytics.gitbook.io/product-docs/).
 
 ## Setup
 

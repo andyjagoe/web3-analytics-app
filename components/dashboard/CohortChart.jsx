@@ -1,24 +1,8 @@
+import { useEffect } from 'react'
 //import { Chart as ChartJS } from 'react-chartjs-2'
-//import { MatrixController, MatrixElement } from 'chartjs-chart-matrix'
-import dynamic from 'next/dynamic'
 import { Chart as ChartJS } from 'chart.js'
-//import { MatrixController, MatrixElement } from 'chartjs-chart-matrix'
-
-/*
-const { MatrixController, MatrixElement } = dynamic(
-    () => import('chartjs-chart-matrix'),
-    { ssr: false }
-);
-*/
-
-const { MatrixController, MatrixElement } = dynamic(
-    async () => {
-        await import('chartjs-chart-matrix')        
-    },
-    { ssr: false }
-);
-
-ChartJS.register(MatrixController, MatrixElement);
+import {color} from 'chart.js/helpers';
+import { MatrixController, MatrixElement } from 'chartjs-chart-matrix'
 
 
 const data = {
@@ -38,12 +22,12 @@ const data = {
       backgroundColor(context) {
         const value = context.dataset.data[context.dataIndex].v;
         const alpha = (value - 5) / 40;
-        return helpers.color('green').alpha(alpha).rgbString();
+        return color('green').alpha(alpha).rgbString();
       },
       borderColor(context) {
         const value = context.dataset.data[context.dataIndex].v;
         const alpha = (value - 5) / 40;
-        return helpers.color('darkgreen').alpha(alpha).rgbString();
+        return color('darkgreen').alpha(alpha).rgbString();
       },
       borderWidth: 1,
       width: ({chart}) => (chart.chartArea || {}).width / 3 - 1,
@@ -53,7 +37,58 @@ const data = {
 
 
 const CohortChart = () =>{
+
+    useEffect(() => {
+        if (ChartJS && MatrixController && MatrixElement) {
+            ChartJS.register(MatrixController, MatrixElement)
+
+            const canvas = document.getElementById("canvas")
+            if(!canvas) return
+
+            const chart = new ChartJS(canvas.getContext("2d"), {
+                type: 'matrix',
+                data: data,
+                options: {
+                    plugins: {
+                      legend: false,
+                      tooltip: {
+                        callbacks: {
+                          title() {
+                            return '';
+                          },
+                          label(context) {
+                            const v = context.dataset.data[context.dataIndex];
+                            return ['x: ' + v.x, 'y: ' + v.y, 'v: ' + v.v];
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      x: {
+                        ticks: {
+                          stepSize: 1
+                        },
+                        grid: {
+                          display: false
+                        }
+                      },
+                      y: {
+                        offset: true,
+                        ticks: {
+                          stepSize: 1
+                        },
+                        grid: {
+                          display: false
+                        }
+                      }
+                    }
+                }
+            });            
+        }
+        
+      }, [ChartJS, MatrixController, MatrixElement])
   
+
     return(
         <div>
             <canvas id='canvas'></canvas>

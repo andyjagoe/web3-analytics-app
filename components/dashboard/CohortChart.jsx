@@ -1,8 +1,8 @@
-import { useEffect } from 'react'
-//import { Chart as ChartJS } from 'react-chartjs-2'
+import { useEffect, useState } from 'react'
 import { Chart as ChartJS } from 'chart.js'
 import {color} from 'chart.js/helpers';
 import { MatrixController, MatrixElement } from 'chartjs-chart-matrix'
+import { Matrix } from "./Matrix.jsx";
 
 
 const data = {
@@ -37,62 +37,62 @@ const data = {
 
 
 const CohortChart = () =>{
+    const [readyToRender, setReadyToRender] = useState(false)
 
     useEffect(() => {
         if (ChartJS && MatrixController && MatrixElement) {
             ChartJS.register(MatrixController, MatrixElement)
-
-            const canvas = document.getElementById("canvas")
-            if(!canvas) return
-
-            const chart = new ChartJS(canvas.getContext("2d"), {
-                type: 'matrix',
-                data: data,
-                options: {
-                    plugins: {
-                      legend: false,
-                      tooltip: {
-                        callbacks: {
-                          title() {
-                            return '';
-                          },
-                          label(context) {
-                            const v = context.dataset.data[context.dataIndex];
-                            return ['x: ' + v.x, 'y: ' + v.y, 'v: ' + v.v];
-                          }
-                        }
-                      }
-                    },
-                    scales: {
-                      x: {
-                        ticks: {
-                          stepSize: 1
-                        },
-                        grid: {
-                          display: false
-                        }
-                      },
-                      y: {
-                        offset: true,
-                        ticks: {
-                          stepSize: 1
-                        },
-                        grid: {
-                          display: false
-                        }
-                      }
-                    }
-                }
-            });            
+            setReadyToRender(true)
         }
         
       }, [ChartJS, MatrixController, MatrixElement])
   
 
     return(
-        <div>
-            <canvas id='canvas'></canvas>
-        </div>
+        <>
+            {readyToRender &&
+                <Matrix
+                    data={data}
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                          legend: false,
+                          tooltip: {
+                            callbacks: {
+                              title() {
+                                return '';
+                              },
+                              label(context) {
+                                const v = context.dataset.data[context.dataIndex];
+                                return ['x: ' + v.x, 'y: ' + v.y, 'v: ' + v.v];
+                              }
+                            }
+                          }
+                        },
+                        scales: {
+                          x: {
+                            ticks: {
+                              stepSize: 1
+                            },
+                            grid: {
+                              display: false
+                            }
+                          },
+                          y: {
+                            offset: true,
+                            ticks: {
+                              stepSize: 1
+                            },
+                            grid: {
+                              display: false
+                            }
+                          }
+                        }
+                    }} 
+                />
+            }   
+        </>
     )
 }
 

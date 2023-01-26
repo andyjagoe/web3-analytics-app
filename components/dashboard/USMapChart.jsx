@@ -1,59 +1,60 @@
-import { useEffect } from 'react'
-import { Chart } from 'react-chartjs-2'
+import { useEffect, useState } from 'react'
+import { Chart as ChartJS } from 'chart.js'
+import { ChoroplethController, GeoFeature, ColorScale, ProjectionScale, topojson } from 'chartjs-chart-geo'
+import { ChoroplethChart } from "./ChoroplethChart.jsx";
 
-//import { ChoroplethController, GeoFeature, ColorScale, ProjectionScale } from 'chartjs-chart-geo'
+const us = require("../../node_modules/us-atlas/states-10m.json");
+const nation = topojson.feature(us, us.objects.nation).features[0];
+const states = topojson.feature(us, us.objects.states).features;
+
+const data = {
+    labels: states.map((d) => d.properties.name),
+    datasets: [{
+        label: 'States',
+        outline: nation,
+        data: states.map((d) => ({feature: d, value: Math.random() * 10})),
+    }]
+}
 
 
-const USMapChart = () =>{
+const USMapChart = () => {
+    const [readyToRender, setReadyToRender] = useState(false)
 
     useEffect(()=>{
-
-        /*
-        let canvas = document.getElementById("canvas")
-        if(!canvas) return
-
-        fetch('https://unpkg.com/us-atlas/states-10m.json').then((r) => r.json()).then((us) => {
-
-            const nation = ChoroplethChart.topojson.feature(us, us.objects.nation).features[0];
-            const states = ChoroplethChart.topojson.feature(us, us.objects.states).features;
-            
-            const chart = new Chart(canvas.getContext("2d"), {
-                type: 'choropleth',
-                data: {
-                labels: states.map((d) => d.properties.name),
-                datasets: [{
-                    label: 'States',
-                    outline: nation,
-                    data: states.map((d) => ({feature: d, value: Math.random() * 10})),
-                }]
-                },
-                options: {
-                legend: {
-                    display: false
-                },
-                scale: {
-                    projection: 'albersUsa'
-                },
-                geo: {
-                    colorScale: {
-                    display: true,
-                    position: 'bottom',
-                    quantize: 5,
-                    legend: {
-                        position: 'bottom-right',
-                    },
-                    },
-                },
-                }
-            });
-            */        
-
+        if (ChartJS && ChoroplethController && GeoFeature && ColorScale && ProjectionScale) {
+            ChartJS.register(ChoroplethController, GeoFeature, ColorScale, ProjectionScale)            
+            setReadyToRender(true)
+        }     
     })
     
     return(
-        <div>
-            <canvas id='canvas'></canvas>
-        </div>
+        <>
+            {readyToRender &&
+                <ChoroplethChart
+                    data={data}
+                    options={{
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        legend: {
+                            display: false
+                        },
+                        scale: {
+                            projection: 'albersUsa'
+                        },
+                        geo: {
+                            colorScale: {
+                            display: true,
+                            position: 'bottom',
+                            quantize: 5,
+                            legend: {
+                                position: 'bottom-right',
+                            },
+                            },
+                        },
+                    }} 
+                />
+            }   
+        </>
     )
 }
 

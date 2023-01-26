@@ -3,6 +3,7 @@ import {
     Typography,
     Grid,
     Avatar,
+    Container
 } from '@mui/material'
 import Link from '../../../src/Link'
 import {useTheme} from '@mui/material/styles'
@@ -19,13 +20,17 @@ import useUser from "../../../hooks/useUser.jsx"
   const {myUser} = useUser(userId)
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics - {myUser?.Item?.name? myUser.Item.name:userId}</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />
       </Head>
 
-      <Grid container direction="row" sx={{ marginTop: theme.spacing(4), alignItems: 'center'}}>
+      <Grid 
+        container 
+        direction="row" 
+        sx={{ marginTop: theme.spacing(4), marginLeft: theme.spacing(2), alignItems: 'center'
+      }}>
       <Grid item xs={12}>
         <Grid container>
           <Breadcrumbs aria-label="breadcrumb">
@@ -63,7 +68,7 @@ import useUser from "../../../hooks/useUser.jsx"
         </Grid>
       </Grid>
 
-    </div>
+    </Container>
   )
 }
 

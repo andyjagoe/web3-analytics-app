@@ -5,7 +5,8 @@ import {
   Grid,
   Box,
   Button,
-  Link
+  Link,
+  Container
 } from '@mui/material'
 import { Add } from '@mui/icons-material'
 import {useTheme} from '@mui/material/styles'
@@ -80,7 +81,7 @@ const DashboardPage: NextPage = () => {
 
   
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />
@@ -189,7 +190,7 @@ const DashboardPage: NextPage = () => {
 
     <AddComponentDialog userId={userId} slug={slug} ref={addComponentRef} />
 
-  </div>
+  </Container>
   )
 }
 

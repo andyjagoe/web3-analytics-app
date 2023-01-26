@@ -1,3 +1,6 @@
+import {
+  Container
+} from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -23,7 +26,7 @@ const MyQueries: NextPage = () => {
   }
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics - My Queries</title>
         <meta name="description" content="My queries for apps that use decentralized web3 analytics." />
@@ -33,7 +36,7 @@ const MyQueries: NextPage = () => {
 
       <MyTabs tabType="QUERIES" tabSelected={2} />     
 
-    </div>
+    </Container>
   )
 }
 

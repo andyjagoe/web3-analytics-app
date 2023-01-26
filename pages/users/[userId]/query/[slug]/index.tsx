@@ -11,7 +11,8 @@ import {
   ListItemButton,
   ListItemText,
   Paper,
-  Link
+  Link,
+  Container
 } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import {useTheme} from '@mui/material/styles'
@@ -220,7 +221,7 @@ const QueryPage: NextPage = () => {
 
   
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />
@@ -428,7 +429,7 @@ const QueryPage: NextPage = () => {
 
     </Grid>
 
-  </div>
+  </Container>
   )
 }
 

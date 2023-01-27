@@ -177,9 +177,9 @@ const DashboardPage: NextPage = () => {
                         case 'BarChart':
                           return <BarChart userId={userId} slug={component?.query} />                      
                         case 'USMapChart':
-                          return <USMapChart />                      
+                          return <USMapChart userId={userId} slug={component?.query} />                      
                         case 'CohortChart':
-                          return <CohortChart />                      
+                          return <CohortChart userId={userId} slug={component?.query} />                      
                         default:
                           return <></>
                       }

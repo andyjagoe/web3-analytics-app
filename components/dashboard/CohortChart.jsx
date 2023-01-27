@@ -36,7 +36,7 @@ const data = {
   };
 
 
-const CohortChart = () =>{
+const CohortChart = ({userId, slug}) =>{
     const [readyToRender, setReadyToRender] = useState(false)
 
     useEffect(() => {

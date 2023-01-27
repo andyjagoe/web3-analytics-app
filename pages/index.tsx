@@ -54,19 +54,19 @@ const Home: NextPage = () => {
                 size="large"
                 onClick={() => {router.push('/apps/new')}}
             >
-                Try it Now
+                Get Started
             </Button>
-          </Grid>
-          <Grid item xs={12} sx={{padding: theme.spacing(2), textAlign: 'center'}} width='100%'>
             <Link 
               variant="button" 
               color="textPrimary" 
               href="https://web3-analytics.gitbook.io/product-docs/"
               target="_blank"
-              sx={{ margin: '20px 10px', textDecoration: 'none' }}
+              sx={{ margin: '20px 20px', textDecoration: 'none' }}
             >
-              Read the Docs
+              Learn more
             </Link>
+          </Grid>
+          <Grid item xs={12} sx={{padding: theme.spacing(2), textAlign: 'center'}} width='100%'>
           </Grid>
         </Grid>
         

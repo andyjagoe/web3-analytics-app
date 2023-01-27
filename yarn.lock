@@ -5228,6 +5228,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
 
+iso-3166-1@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/iso-3166-1/-/iso-3166-1-2.1.1.tgz#79b80d2aebc3c9528d792bdbb8316c912fe37c68"
+  integrity sha512-RZxXf8cw5Y8LyHZIwIRvKw8sWTIHh2/txBT+ehO0QroesVfnz3JNFFX4i/OC/Yuv2bDIVYrHna5PMvjtpefq5w==
+
 jose@^4.1.4, jose@^4.3.7:
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/jose/-/jose-4.8.1.tgz#dc7c2660b115ba29b44880e588c5ac313c158247"
@@ -6832,6 +6837,11 @@ word-wrap@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/word-wrap/-/word-wrap-1.2.3.tgz#610636f6b1f703891bd34771ccb17fb93b47079c"
   integrity sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ==
+
+world-atlas@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/world-atlas/-/world-atlas-2.0.2.tgz#4bca4a578f3a413bd409c3f07f2054fe7375824f"
+  integrity sha512-IXfV0qwlKXpckz1FhwXVwKRjiIhOnWttOskm5CtxMsjgE/MXAYRHWJqgXOpM8IkcPBoXnyTU5lFHcYa5ChG0LQ==
 
 wrap-ansi@^5.1.0:
   version "5.1.0"

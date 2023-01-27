@@ -131,7 +131,7 @@ const AppPage: NextPage = () => {
 
   
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />

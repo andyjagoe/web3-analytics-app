@@ -26,7 +26,7 @@ const MyApps: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - My Apps</title>
         <meta name="description" content="My apps that use decentralized web3 analytics." />

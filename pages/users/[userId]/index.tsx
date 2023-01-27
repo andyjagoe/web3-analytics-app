@@ -20,7 +20,7 @@ import useUser from "../../../hooks/useUser.jsx"
   const {myUser} = useUser(userId)
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - {myUser?.Item?.name? myUser.Item.name:userId}</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />

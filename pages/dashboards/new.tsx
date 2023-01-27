@@ -73,7 +73,7 @@ const NewDashboard: NextPage = () => {
 
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - New Dashboard</title>
         <meta name="description" content="Create a new dashboard for a decentralized web3 analytics app." />

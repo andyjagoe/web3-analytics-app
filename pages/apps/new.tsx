@@ -219,7 +219,7 @@ const NewApp: NextPage = () => {
   
 
     return (
-        <Container>
+        <Container maxWidth={false}>
         <Head>
             <title>Web3 Analytics - New App</title>
             <meta name="description" content="Create a new decentralized web3 analytics app." />

@@ -26,7 +26,7 @@ const FavoriteDashboards: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - My Favorite Dashboards</title>
         <meta name="description" content="My favorite dashboards for apps that use decentralized web3 analytics." />

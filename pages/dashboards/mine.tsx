@@ -26,7 +26,7 @@ const MyDashboards: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - My Dashboards</title>
         <meta name="description" content="My dashboards for apps that use decentralized web3 analytics." />

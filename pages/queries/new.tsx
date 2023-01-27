@@ -73,7 +73,7 @@ const NewQuery: NextPage = () => {
 
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - New Query</title>
         <meta name="description" content="Create a new query for a decentralized web3 analytics app." />

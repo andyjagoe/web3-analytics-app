@@ -26,7 +26,7 @@ const FavoriteQueries: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - My Favorite Queries</title>
         <meta name="description" content="My favorite queries for apps that use decentralized web3 analytics." />

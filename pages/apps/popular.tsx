@@ -22,7 +22,7 @@ const PopularApps: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - Popular Apps</title>
         <meta name="description" content="Popular apps that use decentralized web3 analytics." />

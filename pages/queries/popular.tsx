@@ -19,7 +19,7 @@ const PopularQueries: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - Popular Queries</title>
         <meta name="description" content="Popular queries for apps that use decentralized web3 analytics." />

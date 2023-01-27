@@ -19,7 +19,7 @@ const PopularDashboards: NextPage = () => {
   }
 
   return (
-    <Container>
+    <Container maxWidth={false}>
       <Head>
         <title>Web3 Analytics - Popular Dashboards</title>
         <meta name="description" content="Popular dashboards for apps that use decentralized web3 analytics." />

@@ -15,7 +15,7 @@ import {
   Tab,
   Tabs,
   CircularProgress,
-  Avatar
+  Avatar,
 } from '@mui/material'
 import {
   useAccount,
@@ -131,7 +131,7 @@ const AppPage: NextPage = () => {
 
   
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics</title>
         <meta name="description" content="A decentralized analytics platform where users own their data." />
@@ -384,7 +384,7 @@ const AppPage: NextPage = () => {
       message={snackbarMessage}
     />
 
-  </div>
+  </Container>
   )
 }
 

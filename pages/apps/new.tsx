@@ -9,7 +9,7 @@ import {
   Container,
   InputAdornment,
   Stack,
-  Link
+  Link,
 } from '@mui/material'
 import { BigNumberInput } from 'big-number-input'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -219,7 +219,7 @@ const NewApp: NextPage = () => {
   
 
     return (
-        <div>
+        <Container>
         <Head>
             <title>Web3 Analytics - New App</title>
             <meta name="description" content="Create a new decentralized web3 analytics app." />
@@ -449,7 +449,7 @@ const NewApp: NextPage = () => {
             }
 
         </Container>
-        </div>
+        </Container>
     )}
 
 export default NewApp;

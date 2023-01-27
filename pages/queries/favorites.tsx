@@ -1,3 +1,6 @@
+import {
+  Container
+} from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -23,7 +26,7 @@ const FavoriteQueries: NextPage = () => {
   }
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics - My Favorite Queries</title>
         <meta name="description" content="My favorite queries for apps that use decentralized web3 analytics." />
@@ -33,7 +36,7 @@ const FavoriteQueries: NextPage = () => {
 
       <MyTabs tabType="QUERIES" tabSelected={1} />
 
-    </div>
+    </Container>
   )
 }
 

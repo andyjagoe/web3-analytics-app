@@ -7,7 +7,7 @@ export default function Layout({ children }) {
   return (
     <>
       <MenuAppBar />
-      <Container component="main" maxWidth="s">
+      <Container component="main" maxWidth="s" disableGutters>
         {children}
       </Container>
     </>

@@ -1,3 +1,6 @@
+import {
+  Container
+} from '@mui/material'
 import {useTheme} from '@mui/material/styles'
 import type { NextPage } from 'next'
 import Head from 'next/head'
@@ -16,7 +19,7 @@ const PopularDashboards: NextPage = () => {
   }
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics - Popular Dashboards</title>
         <meta name="description" content="Popular dashboards for apps that use decentralized web3 analytics." />
@@ -26,7 +29,7 @@ const PopularDashboards: NextPage = () => {
 
       <MyTabs tabType="DASHBOARDS" tabSelected={0} />     
 
-    </div>
+    </Container>
   )
 }
 

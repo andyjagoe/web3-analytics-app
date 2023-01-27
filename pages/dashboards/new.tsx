@@ -73,7 +73,7 @@ const NewDashboard: NextPage = () => {
 
 
   return (
-    <div>
+    <Container>
       <Head>
         <title>Web3 Analytics - New Dashboard</title>
         <meta name="description" content="Create a new dashboard for a decentralized web3 analytics app." />
@@ -149,7 +149,7 @@ const NewDashboard: NextPage = () => {
 
       </Container>
 
-    </div>
+    </Container>
   )
 }
 

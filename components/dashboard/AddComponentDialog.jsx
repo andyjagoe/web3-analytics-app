@@ -123,7 +123,6 @@ const AddComponentDialog = (props, ref) => {
                   >
                   <MenuItem value="DataGrid" key="DataGrid">Data Grid</MenuItem>
                   <MenuItem value="BarChart" key="BarChart">Bar Chart</MenuItem>
-                  <MenuItem value="PieChart" key="PieChart">Pie Chart</MenuItem>
                   <MenuItem value="USMapChart" key="USMapChart">US Map Chart</MenuItem>
                   <MenuItem value="CohortChart" key="CohortChart">Cohort Chart</MenuItem>
                 </Select>

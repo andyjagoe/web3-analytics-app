@@ -17,7 +17,6 @@ import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
 import CsvDataGrid from "../../../../../components/dashboard/CsvDataGrid.jsx"
 import BarChart from "../../../../../components/dashboard/BarChart.jsx"
-import PieChart from "../../../../../components/dashboard/PieChart.jsx"
 import USMapChart from "../../../../../components/dashboard/USMapChart.jsx"
 import CohortChart from "../../../../../components/dashboard/CohortChart.jsx"
 import ComponentNavBar from "../../../../../components/dashboard/ComponentNavBar.jsx"
@@ -177,8 +176,6 @@ const DashboardPage: NextPage = () => {
                           return <CsvDataGrid userId={userId} slug={component?.query} />
                         case 'BarChart':
                           return <BarChart userId={userId} slug={component?.query} />                      
-                        case 'PieChart':
-                          return <PieChart />                      
                         case 'USMapChart':
                           return <USMapChart />                      
                         case 'CohortChart':

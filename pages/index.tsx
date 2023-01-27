@@ -66,8 +66,6 @@ const Home: NextPage = () => {
               Learn more
             </Link>
           </Grid>
-          <Grid item xs={12} sx={{padding: theme.spacing(2), textAlign: 'center'}} width='100%'>
-          </Grid>
         </Grid>
         
 

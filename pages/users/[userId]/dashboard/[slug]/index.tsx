@@ -18,6 +18,9 @@ import useItem from "../../../../../hooks/useItem.jsx"
 import StarButton from "../../../../../components/StarButton.jsx"
 import CsvDataGrid from "../../../../../components/dashboard/CsvDataGrid.jsx"
 import BarChart from "../../../../../components/dashboard/BarChart.jsx"
+import USMapChart from "../../../../../components/dashboard/USMapChart.jsx"
+import WorldMapChart from "../../../../../components/dashboard/WorldMapChart.jsx"
+import CohortChart from "../../../../../components/dashboard/CohortChart.jsx"
 import ComponentNavBar from "../../../../../components/dashboard/ComponentNavBar.jsx"
 import { Responsive, WidthProvider } from "react-grid-layout"
 import useComponents from "../../../../../hooks/useComponents.jsx"
@@ -175,6 +178,12 @@ const DashboardPage: NextPage = () => {
                           return <CsvDataGrid userId={userId} slug={component?.query} />
                         case 'BarChart':
                           return <BarChart userId={userId} slug={component?.query} />                      
+                        case 'USMapChart':
+                          return <USMapChart userId={userId} slug={component?.query} />                      
+                        case 'WorldMapChart':
+                          return <WorldMapChart userId={userId} slug={component?.query} />                      
+                        case 'CohortChart':
+                          return <CohortChart userId={userId} slug={component?.query} />                      
                         default:
                           return <></>
                       }

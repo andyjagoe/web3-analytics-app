@@ -54,7 +54,7 @@ const Home: NextPage = () => {
                 size="large"
                 onClick={() => {router.push('/apps/new')}}
             >
-                Register App
+                Try it Now
             </Button>
           </Grid>
           <Grid item xs={12} sx={{padding: theme.spacing(2), textAlign: 'center'}} width='100%'>

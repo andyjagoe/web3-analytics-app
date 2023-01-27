@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 import Image from 'next/image'
 import dashboardPic from '../public/static/images/dashboard.png'
 import queryPic from '../public/static/images/query.png'
-import queryTwoPic from '../public/static/images/query2.png'
+import demographicsPic from '../public/static/images/demographics.png'
 
 
 const Home: NextPage = () => {
@@ -129,7 +129,7 @@ const Home: NextPage = () => {
             margin: theme.spacing(4)
           }}>
             <Image
-              src={queryTwoPic}
+              src={queryPic}
               alt="Sample Query For Specific User"
             />
           </div>
@@ -162,7 +162,7 @@ const Home: NextPage = () => {
           margin: theme.spacing(4)
         }}>
           <Image
-            src={queryPic}
+            src={demographicsPic}
             alt="Sample Query"
           />
         </div>

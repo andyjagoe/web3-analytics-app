@@ -125,7 +125,7 @@ const AddComponentDialog = (props, ref) => {
                   <MenuItem value="BarChart" key="BarChart">Bar Chart</MenuItem>
                   <MenuItem value="USMapChart" key="USMapChart">US Map Chart</MenuItem>
                   <MenuItem value="WorldMapChart" key="WorldMapChart">World Map Chart</MenuItem>
-                  <MenuItem value="CohortChart" key="CohortChart">Cohort Chart</MenuItem>
+                  <MenuItem value="WeeklyCohortChart" key="WeeklyCohortChart">Weekly Cohort Chart</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

@@ -116,6 +116,11 @@ const WorldMapChart = ({userId, slug}) => {
                               projection: 'equalEarth',
                             },
                         },
+                        layout: {
+                            padding: {
+                              top: 48,
+                            }
+                        }
                     }} 
                 />
             }   

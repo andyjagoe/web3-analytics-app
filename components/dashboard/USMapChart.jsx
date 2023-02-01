@@ -119,6 +119,11 @@ const USMapChart = ({userId, slug}) => {
                             },
                             },
                         },
+                        layout: {
+                            padding: {
+                              top: 48,
+                            }
+                        }
                     }} 
                 />
             }   
